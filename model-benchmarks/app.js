@@ -120,6 +120,9 @@
     fadeTimer: 0,
     plotEventsBound: false,
     pointer: null,
+    hoverLayer: null,
+    hoverObserver: null,
+    tooltipModel: null,
   };
 
   function setStatus(message, isError) {
@@ -622,37 +625,141 @@
     Plotly.relayout(els.chart, { "xaxis.autorange": true, "yaxis.autorange": true });
   }
 
+  function distanceToSegment(px, py, ax, ay, bx, by) {
+    const dx = bx - ax;
+    const dy = by - ay;
+    const len = dx * dx + dy * dy;
+    const t = len ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len)) : 0;
+    return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+  }
+
+  // Nearest ladder to the pointer, measured against markers and the segments between them,
+  // so hovering or clicking anywhere along a line resolves to that model.
+  function nearestModel(clientX, clientY, maxDistance) {
+    const graph = els.chart;
+    const layout = graph && graph._fullLayout;
+    const drag = graph && graph.querySelector(".nsewdrag");
+    if (!layout || !drag || !graph.data || !graph.data.length) return null;
+    const box = drag.getBoundingClientRect();
+    const px = clientX - box.left;
+    const py = clientY - box.top;
+    if (px < -maxDistance || py < -maxDistance || px > box.width + maxDistance || py > box.height + maxDistance) {
+      return null;
+    }
+    const xa = layout.xaxis;
+    const ya = layout.yaxis;
+    let best = null;
+    let bestDistance = maxDistance;
+    graph.data.forEach(function (trace) {
+      const pts = trace.x.map(function (x, i) {
+        return [xa.c2p(x), ya.c2p(trace.y[i])];
+      });
+      pts.forEach(function (p, i) {
+        let d = Math.hypot(px - p[0], py - p[1]);
+        if (i > 0) {
+          const prev = pts[i - 1];
+          d = Math.min(d, distanceToSegment(px, py, prev[0], prev[1], p[0], p[1]));
+        }
+        if (d < bestDistance) {
+          bestDistance = d;
+          best = trace.meta;
+        }
+      });
+    });
+    return best;
+  }
+
+  // Plotly draws hover bubbles with square corners and no radius option. Redraw the same
+  // box and caret with rounded corners, keeping Plotly's placement untouched.
+  function roundHoverPath(path) {
+    const d = path.getAttribute("d") || "";
+    if (path.dataset.rounded === d) return;
+    const side = /^M0,0L6,/.test(d) ? 1 : /^M0,0L-6,/.test(d) ? -1 : 0;
+    if (!side) return;
+    const bbox = path.getBBox();
+    const y0 = bbox.y;
+    const y1 = bbox.y + bbox.height;
+    const far = side > 0 ? bbox.x + bbox.width : bbox.x;
+    const near = 6 * side;
+    const r = Math.max(0, Math.min(6, y1 - 6, -6 - y0, Math.abs(far - near) / 2));
+    const s = side;
+    const rounded = [
+      "M0,0",
+      "L" + near + ",6",
+      "V" + (y1 - r),
+      "Q" + near + "," + y1 + " " + (near + s * r) + "," + y1,
+      "H" + (far - s * r),
+      "Q" + far + "," + y1 + " " + far + "," + (y1 - r),
+      "V" + (y0 + r),
+      "Q" + far + "," + y0 + " " + (far - s * r) + "," + y0,
+      "H" + (near + s * r),
+      "Q" + near + "," + y0 + " " + near + "," + (y0 + r),
+      "V-6",
+      "Z",
+    ].join("");
+    path.setAttribute("d", rounded);
+    path.dataset.rounded = rounded;
+  }
+
+  function roundHoverLabels() {
+    const layer = els.chart.querySelector(".hoverlayer");
+    if (!layer) return;
+    layer.querySelectorAll(".hovertext > path").forEach(roundHoverPath);
+  }
+
+  function watchHoverLayer() {
+    const layer = els.chart.querySelector(".hoverlayer");
+    if (!layer || layer === state.hoverLayer) return;
+    if (state.hoverObserver) state.hoverObserver.disconnect();
+    state.hoverLayer = layer;
+    state.hoverObserver = new MutationObserver(roundHoverLabels);
+    state.hoverObserver.observe(layer, { childList: true, subtree: true, attributes: true, attributeFilter: ["d"] });
+  }
+
   function ensurePlotEvents() {
+    watchHoverLayer();
     if (state.plotEventsBound || typeof els.chart.on !== "function") return;
     state.plotEventsBound = true;
+    // The model under Plotly's tooltip wins, so the highlight always matches the bubble shown.
     els.chart.on("plotly_hover", function (event) {
       const pt = event.points && event.points[0];
-      if (pt) setHoverModel(pt.data.meta);
+      state.tooltipModel = pt ? pt.data.meta : null;
+      if (state.tooltipModel) setHoverModel(state.tooltipModel);
     });
     els.chart.on("plotly_unhover", function () {
+      state.tooltipModel = null;
+    });
+    els.chart.addEventListener("pointermove", function (event) {
+      if (event.buttons) return;
+      setHoverModel(state.tooltipModel || nearestModel(event.clientX, event.clientY, 12));
+    });
+    els.chart.addEventListener("pointerleave", function () {
+      state.tooltipModel = null;
       setHoverModel(null);
     });
-    // Pin on a true click. Zoom drags move farther than this threshold, so they do not pin.
+    // A click on or near a line pins it; a click on empty plot clears the pin. Zoom drags
+    // travel farther than the threshold and are ignored.
     els.chart.addEventListener("pointerdown", function (event) {
       if (event.button !== 0) return;
-      state.pointer = {
-        x: event.clientX,
-        y: event.clientY,
-        model: state.hoverModel,
-      };
+      state.pointer = { x: event.clientX, y: event.clientY };
     });
     els.chart.addEventListener("pointerup", function (event) {
       const start = state.pointer;
       state.pointer = null;
-      if (!start || !start.model || event.button !== 0) return;
-      if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) return;
-      setPinnedModel(state.pinnedModel === start.model ? null : start.model);
+      if (!start || event.button !== 0) return;
+      if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return;
+      const id = state.hoverModel || nearestModel(event.clientX, event.clientY, 14);
+      if (id) setPinnedModel(state.pinnedModel === id ? null : id);
+      else if (event.target.classList && event.target.classList.contains("nsewdrag")) setPinnedModel(null);
     });
     els.chart.addEventListener("pointercancel", function () {
       state.pointer = null;
     });
     els.chart.on("plotly_relayout", syncResetButton);
-    els.chart.on("plotly_afterplot", applyEmphasis);
+    els.chart.on("plotly_afterplot", function () {
+      watchHoverLayer();
+      applyEmphasis();
+    });
   }
 
   function tickUsd(value) {
