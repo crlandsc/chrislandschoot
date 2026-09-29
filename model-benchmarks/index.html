@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="description" content="Private cost-vs-score model benchmark dashboard">
+  <title>Cost vs score</title>
+  <link rel="icon" href="../assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon/favicon-192x192.png">
+  <link rel="apple-touch-icon" href="../assets/favicon/favicon-192x192.png">
+  <link rel="preload" href="../assets/fonts/Brandon-Grotesque/Brandon-Light.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="../assets/fonts/Brandon-Grotesque/Brandon-Medium.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="app.css?v=7">
+  <script>
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+  </script>
+</head>
+<body class="bench">
+  <header>
+    <div class="container">
+      <a href="/" class="logo">CHRISTOPHER LANDSCHOOT</a>
+      <button type="button" id="theme-toggle" title="Toggle theme" aria-label="Switch to dark mode">
+        <svg class="theme-icon theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="5" fill="currentColor"/>
+          <rect x="11" y="1" width="2" height="3" fill="currentColor" rx="1"/>
+          <rect x="11" y="20" width="2" height="3" fill="currentColor" rx="1"/>
+          <rect x="1" y="11" width="3" height="2" fill="currentColor" rx="1"/>
+          <rect x="20" y="11" width="3" height="2" fill="currentColor" rx="1"/>
+          <rect x="3.5" y="3.5" width="3" height="2" fill="currentColor" rx="1" transform="rotate(45 5 5)"/>
+          <rect x="17.5" y="3.5" width="3" height="2" fill="currentColor" rx="1" transform="rotate(-45 19 5)"/>
+          <rect x="3.5" y="18.5" width="3" height="2" fill="currentColor" rx="1" transform="rotate(-45 5 19)"/>
+          <rect x="17.5" y="18.5" width="3" height="2" fill="currentColor" rx="1" transform="rotate(45 19 19)"/>
+        </svg>
+        <svg class="theme-icon theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container intro">
+      <h1 id="board-title">Cost vs score</h1>
+      <p class="meta-row">
+        <span id="as-of">Loading snapshot…</span>
+        <span class="sep" id="source-sep" hidden aria-hidden="true">·</span>
+        <a id="source-link" hidden>Source</a>
+      </p>
+      <div class="board-tabs" id="board-tabs" role="tablist" aria-label="Benchmark boards"></div>
+    </div>
+
+    <section class="stage" aria-label="Chart">
+      <div class="container stage-inner">
+        <div class="filters">
+          <div class="filters-head">
+            <h2>Models <span id="model-count" class="count"></span></h2>
+            <div class="inline-actions">
+              <button type="button" id="models-all" class="text-btn">All</button>
+              <span class="sep" aria-hidden="true">·</span>
+              <button type="button" id="models-none" class="text-btn">None</button>
+            </div>
+          </div>
+          <div class="model-groups" id="model-list"></div>
+        </div>
+
+        <div class="chart-card" id="chart-card">
+          <div class="chart-toolbar">
+            <div class="segmented" role="group" aria-label="Cost axis scale">
+              <span class="toolbar-label">Cost axis</span>
+              <button type="button" data-scale="linear" aria-pressed="false">Linear</button>
+              <button type="button" data-scale="log" aria-pressed="false">Log</button>
+            </div>
+            <div class="inline-actions">
+              <button type="button" id="reset-view" class="text-btn" disabled>Reset view</button>
+              <span class="sep" aria-hidden="true">·</span>
+              <button type="button" id="download" class="text-btn">Save PNG</button>
+            </div>
+          </div>
+          <div id="chart" role="img" aria-labelledby="board-title"></div>
+        </div>
+        <p id="status" class="status" role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="app.js?v=9" defer></script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+/* Dashboard-only layout. Color, type, and header come from the site stylesheet. */
+
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("../assets/fonts/Brandon-Grotesque/Brandon-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("../assets/fonts/Brandon-Grotesque/Brandon-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Brandon Grotesque";
+  src: url("../assets/fonts/Brandon-Grotesque/Brandon-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+.theme-icon-dark {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-icon-light {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-icon-dark {
+  display: block;
+}
+
+/* The gray stage fills whatever the header and intro leave, so the page ends at the viewport. */
+body.bench {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+body.bench main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro.container {
+  padding-top: var(--space-m);
+  padding-bottom: 0;
+}
+
+h1 {
+  text-align: left;
+  font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+  font-weight: var(--font-weight-medium);
+  margin: 0 0 0.4rem;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin: 0;
+  color: var(--clr-text-secondary);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-light);
+  min-height: 1.4rem;
+}
+
+.meta-row a {
+  font-weight: var(--font-weight-regular);
+}
+
+.sep {
+  color: var(--clr-text-secondary);
+}
+
+.board-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.25rem 1.35rem;
+  margin-top: var(--space-m);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.board-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.board-tabs button {
+  appearance: none;
+  position: relative;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.35rem 0 0.9rem;
+  border: 0;
+  background: none;
+  color: var(--clr-text-secondary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-light);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.board-tabs button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--clr-accent-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.board-tabs button:hover,
+.board-tabs button:focus-visible {
+  color: var(--clr-accent-primary);
+}
+
+.board-tabs button:hover::after,
+.board-tabs button:focus-visible::after,
+.board-tabs button[aria-selected="true"]::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.board-tabs button[aria-selected="true"] {
+  color: var(--clr-text-headings);
+  font-weight: var(--font-weight-medium);
+}
+
+.board-tabs button[aria-selected="true"]:hover,
+.board-tabs button[aria-selected="true"]:focus-visible {
+  color: var(--clr-accent-primary);
+}
+
+.board-tabs button:focus-visible {
+  outline: 2px solid var(--clr-accent-primary);
+  outline-offset: 3px;
+}
+
+.stage {
+  flex: 1 0 auto;
+  display: flex;
+  background: var(--clr-background-secondary);
+  border-top: 1px solid var(--clr-border-primary);
+  transition: background-color var(--transition-standard), border-color var(--transition-standard);
+}
+
+.stage-inner.container {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-m);
+  padding-bottom: var(--space-m);
+}
+
+.filters-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-bottom: 0.6rem;
+}
+
+.filters-head h2 {
+  text-align: left;
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  margin: 0;
+}
+
+.count {
+  margin-left: 0.45rem;
+  color: var(--clr-text-secondary);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-light);
+}
+
+.inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.text-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0.15rem 0.1rem;
+  color: var(--clr-accent-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-regular);
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.text-btn:hover:not(:disabled),
+.text-btn:focus-visible {
+  color: var(--clr-accent-secondary);
+  text-decoration: underline;
+}
+
+.text-btn:disabled {
+  color: var(--clr-text-secondary);
+  opacity: 0.55;
+  cursor: default;
+}
+
+.text-btn:focus-visible {
+  outline: 2px solid var(--clr-accent-primary);
+  outline-offset: 3px;
+}
+
+.model-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 0;
+}
+
+.model-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0 1.1rem;
+  border-left: 1px solid var(--clr-border-primary);
+}
+
+.model-group:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.group-label {
+  appearance: none;
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--clr-text-secondary);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.group-label:hover,
+.group-label:focus-visible {
+  color: var(--clr-accent-primary);
+}
+
+.group-label:focus-visible {
+  outline: 2px solid var(--clr-accent-primary);
+  outline-offset: 3px;
+}
+
+.group-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.model-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.34rem 0.75rem 0.34rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--clr-text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-light);
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0.42;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.model-chip[aria-pressed="true"] {
+  opacity: 1;
+  background: var(--clr-background-primary);
+  border-color: var(--clr-border-primary);
+  box-shadow: var(--shadow-standard);
+}
+
+.model-chip:hover,
+.model-chip.is-hot,
+.model-chip:focus-visible {
+  opacity: 1;
+}
+
+.model-chip.is-hot,
+.model-chip:focus-visible {
+  border-color: var(--clr-accent-primary);
+}
+
+.model-chip:focus-visible {
+  outline: none;
+}
+
+.model-chip.is-empty,
+.model-chip.is-empty[aria-pressed="true"] {
+  opacity: 0.35;
+  background: transparent;
+  border-color: var(--clr-border-primary);
+  border-style: dashed;
+  box-shadow: none;
+  cursor: default;
+}
+
+.swatch {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.chart-card {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  margin-top: var(--space-s);
+  background: var(--clr-background-primary);
+  border: 1px solid var(--clr-border-primary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-standard);
+  overflow: hidden;
+  transition: opacity 0.18s ease, background-color var(--transition-standard), border-color var(--transition-standard);
+}
+
+.chart-card.is-fading {
+  opacity: 0.4;
+}
+
+.chart-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding: 0.6rem 1rem 0;
+}
+
+.toolbar-label {
+  margin-right: 0.5rem;
+  color: var(--clr-text-secondary);
+  font-size: 0.8rem;
+}
+
+.segmented {
+  display: flex;
+  align-items: center;
+}
+
+.segmented button {
+  appearance: none;
+  margin: 0;
+  padding: 0.22rem 0.65rem;
+  border: 1px solid var(--clr-border-primary);
+  background: transparent;
+  color: var(--clr-text-secondary);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.segmented button[data-scale="linear"] {
+  border-radius: 999px 0 0 999px;
+}
+
+.segmented button[data-scale="log"] {
+  border-left: 0;
+  border-radius: 0 999px 999px 0;
+}
+
+.segmented button:hover {
+  color: var(--clr-accent-primary);
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--clr-accent-primary);
+  border-color: var(--clr-accent-primary);
+  color: #fff;
+}
+
+.segmented button:focus-visible {
+  outline: 2px solid var(--clr-accent-primary);
+  outline-offset: 2px;
+}
+
+#chart {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.modebar {
+  display: none !important;
+}
+
+/* Plotly's "Double-click to zoom back out" notice */
+.plotly-notifier {
+  font-family: var(--font-primary) !important;
+}
+
+.plotly-notifier .notifier-note {
+  background: rgba(255, 255, 255, 0.88) !important;
+  color: var(--clr-text-primary) !important;
+  border: 1px solid var(--clr-border-primary) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-standard) !important;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  font-family: var(--font-primary) !important;
+  font-weight: var(--font-weight-light) !important;
+  font-size: 0.875rem !important;
+  padding: 0.65rem 0.85rem !important;
+  max-width: 16rem;
+}
+
+.plotly-notifier .notifier-close {
+  color: var(--clr-text-secondary) !important;
+  top: 0.45rem !important;
+  right: 0.45rem !important;
+}
+
+.plotly-notifier .notifier-close:hover {
+  color: var(--clr-accent-primary) !important;
+}
+
+html[data-theme="dark"] .plotly-notifier .notifier-note {
+  background: rgba(30, 30, 30, 0.88) !important;
+}
+
+/* Plotly draws the caret bubble as SVG; soften the fill a touch via opacity on the path. */
+#chart .hoverlayer .hovertext path {
+  opacity: 0.94;
+}
+
+/* Effort labels stay hidden until a trace is hot. Opacity for dimming is set in JS. */
+#chart .scatterlayer .trace {
+  transition: opacity 0.2s ease;
+}
+
+#chart .scatterlayer .trace .textpoint {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+#chart .scatterlayer .trace.is-hot .textpoint {
+  opacity: 1;
+}
+
+.status {
+  margin: 0.45rem 0 0;
+  font-size: 0.875rem;
+  color: var(--clr-text-secondary);
+}
+
+.status:empty {
+  display: none;
+}
+
+.status.error {
+  color: #b42318;
+}
+
+html[data-theme="dark"] .status.error {
+  color: #f97066;
+}
+
+@media (max-width: 720px) {
+  .board-tabs {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .intro.container {
+    padding-top: var(--space-s);
+  }
+
+  .model-group {
+    padding: 0;
+    border-left: 0;
+    width: 100%;
+  }
+
+  .chart-toolbar {
+    padding: 0.6rem 0.75rem 0;
+  }
+
+  .toolbar-label {
+    display: none;
+  }
+
+  .chart-card {
+    min-height: 420px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-tabs button::after,
+  .board-tabs button,
+  .model-chip,
+  .chart-card,
+  .text-btn,
+  #chart .scatterlayer .trace,
+  #chart .scatterlayer .trace .textpoint {
+    transition: none;
+  }
+}
