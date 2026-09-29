@@ -4,8 +4,8 @@
   const DATA_URL = "data/live-cost-vs-score-latest.json";
   const FONT = '"Brandon Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
   const BOARD_ORDER = [
-    "cursorbench_4_0",
     "aa_intelligence_v4_3_2",
+    "cursorbench_4_0",
     "aa_coding_agent_v1_5",
     "terminal_bench_4_0",
     "scicode",
@@ -116,8 +116,10 @@
     selected: new Set(),
     xScale: "linear",
     hoverModel: null,
+    pinnedModel: null,
     fadeTimer: 0,
     plotEventsBound: false,
+    tipEl: null,
   };
 
   function setStatus(message, isError) {
@@ -175,12 +177,6 @@
   function effortLabel(value) {
     if (!value) return "n/a";
     return EFFORT_LABELS[String(value).toLowerCase()] || String(value);
-  }
-
-  function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, function (ch) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
-    });
   }
 
   function boardIds(payload) {
@@ -397,10 +393,114 @@
     });
   }
 
+  function activeModelId() {
+    return state.hoverModel || state.pinnedModel || null;
+  }
+
   function setHoverModel(id) {
     if (state.hoverModel === id) return;
     state.hoverModel = id;
     applyEmphasis();
+  }
+
+  function setPinnedModel(id) {
+    state.pinnedModel = id || null;
+    applyEmphasis();
+  }
+
+  function ensureTip() {
+    if (state.tipEl) return state.tipEl;
+    const tip = document.createElement("div");
+    tip.className = "chart-tip";
+    tip.hidden = true;
+    tip.setAttribute("role", "tooltip");
+    els.chartCard.appendChild(tip);
+    state.tipEl = tip;
+    return tip;
+  }
+
+  function hideTip() {
+    const tip = ensureTip();
+    tip.hidden = true;
+    tip.style.borderColor = "";
+  }
+
+  function showTip(pt) {
+    const tip = ensureTip();
+    const colors = plotTheme();
+    const data = pt.customdata || [];
+    // customdata: [effort, y, x, harness, label, yField]
+    const label = data[4] || pt.data.name || "Model";
+    const effort = effortLabel(data[0]);
+    const score = formatScore(Number(data[1]), data[5]);
+    const cost = formatUsd(Number(data[2])) + " per task";
+    const harness = data[3];
+    const scoreName = data[5] === "score_pct" ? "Score" : "Index";
+    const color = Array.isArray(pt.data.marker.color)
+      ? pt.data.marker.color[0]
+      : pt.data.marker.color;
+
+    tip.replaceChildren();
+    const name = document.createElement("div");
+    name.className = "chart-tip-name";
+    name.textContent = label;
+    tip.appendChild(name);
+
+    [
+      ["Effort", effort],
+      [scoreName, score],
+      ["Cost", cost],
+    ].forEach(function (row) {
+      const line = document.createElement("div");
+      line.className = "chart-tip-row";
+      const k = document.createElement("span");
+      k.className = "chart-tip-key";
+      k.textContent = row[0];
+      const v = document.createElement("span");
+      v.textContent = row[1];
+      line.append(k, v);
+      tip.appendChild(line);
+    });
+    if (harness) {
+      const line = document.createElement("div");
+      line.className = "chart-tip-row chart-tip-muted";
+      const k = document.createElement("span");
+      k.className = "chart-tip-key";
+      k.textContent = "Harness";
+      const v = document.createElement("span");
+      v.textContent = harness;
+      line.append(k, v);
+      tip.appendChild(line);
+    }
+
+    tip.style.borderColor = color || colors.line;
+    tip.hidden = false;
+
+    const card = els.chartCard.getBoundingClientRect();
+    const layout = els.chart._fullLayout || {};
+    const size = layout._size || {};
+    const bbox = pt.bbox || {};
+    let pointX;
+    let pointTop;
+    let pointBottom;
+    if (Number.isFinite(bbox.x0) && Number.isFinite(bbox.y0)) {
+      pointX = (bbox.x0 + bbox.x1) / 2 - card.left;
+      pointTop = Math.min(bbox.y0, bbox.y1) - card.top;
+      pointBottom = Math.max(bbox.y0, bbox.y1) - card.top;
+    } else {
+      pointX = (size.l || 0) + pt.xaxis.l2p(pt.x);
+      pointTop = (size.t || 0) + pt.yaxis.l2p(pt.y);
+      pointBottom = pointTop;
+    }
+
+    tip.style.left = "0px";
+    tip.style.top = "0px";
+    const tipRect = tip.getBoundingClientRect();
+    let left = Math.min(Math.max(8, pointX - tipRect.width / 2), card.width - tipRect.width - 8);
+    let top = pointTop - tipRect.height - 10;
+    if (top < 36) top = pointBottom + 12;
+    tip.style.left = Math.round(left) + "px";
+    tip.style.top = Math.round(top) + "px";
   }
 
   function toggleModels(ids, on) {
@@ -408,6 +508,7 @@
       if (on) state.selected.add(id);
       else state.selected.delete(id);
     });
+    if (state.pinnedModel && !state.selected.has(state.pinnedModel)) setPinnedModel(null);
     renderModels();
     drawChart();
   }
@@ -431,7 +532,9 @@
       return button;
     }
     button.addEventListener("click", function () {
-      toggleModels([entry.id], !state.selected.has(entry.id));
+      const turningOff = state.selected.has(entry.id);
+      if (turningOff && state.pinnedModel === entry.id) setPinnedModel(null);
+      toggleModels([entry.id], !turningOff);
     });
     button.addEventListener("mouseenter", function () {
       setHoverModel(entry.id);
@@ -498,6 +601,7 @@
   function selectAll(on) {
     const board = getBoard(state.boardId);
     state.selected = new Set();
+    if (!on) setPinnedModel(null);
     if (on) {
       modelEntries(board).forEach(function (entry) {
         state.selected.add(entry.id);
@@ -513,6 +617,8 @@
     const firstPaint = !state.boardId;
     state.boardId = boardId;
     state.hoverModel = null;
+    state.pinnedModel = null;
+    hideTip();
     state.xScale = board.x_scale === "log" ? "log" : "linear";
     state.selected = new Set(
       modelEntries(board).map(function (entry) {
@@ -551,7 +657,7 @@
   function applyEmphasis() {
     const graph = els.chart;
     const data = graph && graph.data;
-    const hot = state.hoverModel;
+    const hot = activeModelId();
     const nodes = graph ? graph.querySelectorAll(".scatterlayer .trace") : [];
     Array.prototype.forEach.call(nodes, function (node, index) {
       const id = data && data[index] ? data[index].meta : null;
@@ -560,7 +666,9 @@
     });
     const chips = els.modelList.querySelectorAll(".model-chip");
     Array.prototype.forEach.call(chips, function (chip) {
-      chip.classList.toggle("is-hot", chip.dataset.modelId === hot);
+      const id = chip.dataset.modelId;
+      chip.classList.toggle("is-hot", id === hot);
+      chip.classList.toggle("is-pinned", id === state.pinnedModel);
     });
   }
 
@@ -584,12 +692,26 @@
     state.plotEventsBound = true;
     els.chart.on("plotly_hover", function (event) {
       const pt = event.points && event.points[0];
-      if (pt) setHoverModel(pt.data.meta);
+      if (!pt) return;
+      setHoverModel(pt.data.meta);
+      showTip(pt);
     });
     els.chart.on("plotly_unhover", function () {
       setHoverModel(null);
+      hideTip();
     });
-    els.chart.on("plotly_relayout", syncResetButton);
+    els.chart.on("plotly_click", function (event) {
+      const pt = event.points && event.points[0];
+      if (!pt) return;
+      const id = pt.data.meta;
+      setPinnedModel(state.pinnedModel === id ? null : id);
+      setHoverModel(id);
+      showTip(pt);
+    });
+    els.chart.on("plotly_relayout", function () {
+      hideTip();
+      syncResetButton();
+    });
     els.chart.on("plotly_afterplot", applyEmphasis);
   }
 
@@ -623,20 +745,6 @@
       tickvals: values,
       ticktext: values.map(tickUsd),
     };
-  }
-
-  function hoverText(entry, point, axes, colors) {
-    const muted = 'style="color:' + colors.muted + '"';
-    const rows = [
-      "<b>" + escapeHtml(entry.label) + "</b>",
-      "<span " + muted + ">Effort</span>  " + escapeHtml(effortLabel(point.effort)),
-      "<span " + muted + ">" + (axes.y === "score_pct" ? "Score" : "Index") + "</span>  " +
-        formatScore(point[axes.y], axes.y),
-      "<span " + muted + ">Cost</span>  " + formatUsd(point[axes.x]) + " per task",
-    ];
-    const harness = point.harness || (entry.series && entry.series.harness);
-    if (harness) rows.push("<span " + muted + ">Harness</span>  " + escapeHtml(harness));
-    return rows.join("<br>");
   }
 
   function drawChart() {
@@ -678,16 +786,17 @@
           }),
           textposition: "top center",
           textfont: { size: 11, color: colors.muted, family: FONT },
-          hovertext: points.map(function (point) {
-            return hoverText(entry, point, axes, colors);
+          customdata: points.map(function (point) {
+            return [
+              point.effort || "",
+              point[axes.y],
+              point[axes.x],
+              point.harness || (entry.series && entry.series.harness) || "",
+              entry.label,
+              axes.y,
+            ];
           }),
-          hovertemplate: "%{hovertext}<extra></extra>",
-          hoverlabel: {
-            bgcolor: colors.paper,
-            bordercolor: entry.color,
-            align: "left",
-            font: { family: FONT, size: 13, color: colors.text },
-          },
+          hoverinfo: "none",
           cliponaxis: false,
           marker: {
             size: points.length > 1 ? 11 : 13,
