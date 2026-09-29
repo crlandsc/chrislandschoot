@@ -340,7 +340,6 @@ h1 {
 }
 
 .chart-card {
-  position: relative;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
@@ -432,11 +431,13 @@ h1 {
 }
 
 .plotly-notifier .notifier-note {
-  background: var(--clr-background-primary) !important;
+  background: rgba(255, 255, 255, 0.88) !important;
   color: var(--clr-text-primary) !important;
   border: 1px solid var(--clr-border-primary) !important;
   border-radius: var(--border-radius) !important;
   box-shadow: var(--shadow-standard) !important;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
   font-family: var(--font-primary) !important;
   font-weight: var(--font-weight-light) !important;
   font-size: 0.875rem !important;
@@ -444,67 +445,32 @@ h1 {
   max-width: 16rem;
 }
 
+.plotly-notifier .notifier-close {
+  color: var(--clr-text-secondary) !important;
+  top: 0.45rem !important;
+  right: 0.45rem !important;
+}
+
+.plotly-notifier .notifier-close:hover {
+  color: var(--clr-accent-primary) !important;
+}
+
 html[data-theme="dark"] .plotly-notifier .notifier-note {
-  background: var(--clr-background-secondary) !important;
-}
-
-/* Glass tooltip sitting above the Plotly SVG */
-.chart-tip {
-  position: absolute;
-  z-index: 5;
-  min-width: 9.5rem;
-  max-width: 14rem;
-  padding: 0.55rem 0.7rem;
-  border: 1px solid var(--clr-border-primary);
-  border-radius: var(--border-radius);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--clr-text-primary);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(14px) saturate(1.25);
-  -webkit-backdrop-filter: blur(14px) saturate(1.25);
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-light);
-  line-height: 1.35;
-  pointer-events: none;
-}
-
-html[data-theme="dark"] .chart-tip {
-  background: rgba(30, 30, 30, 0.72);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-}
-
-.chart-tip-name {
-  margin-bottom: 0.25rem;
-  color: var(--clr-text-headings);
-  font-weight: var(--font-weight-medium);
-}
-
-.chart-tip-row {
-  display: grid;
-  grid-template-columns: 4.2rem 1fr;
-  gap: 0.4rem;
-}
-
-.chart-tip-key {
-  color: var(--clr-text-secondary);
-}
-
-.chart-tip-muted {
-  margin-top: 0.1rem;
-  color: var(--clr-text-secondary);
+  background: rgba(30, 30, 30, 0.88) !important;
 }
 
 .model-chip.is-pinned {
   border-color: var(--clr-accent-primary);
 }
 
-/* Emphasis is applied to the rendered SVG so hovering never re-renders the plot. */
-#chart .scatterlayer .trace {
-  transition: opacity 0.2s ease;
+/* Plotly draws the caret bubble as SVG; soften the fill a touch via opacity on the path. */
+#chart .hoverlayer .hovertext path {
+  opacity: 0.94;
 }
 
-#chart .scatterlayer .trace.is-dim {
-  opacity: 0.22;
+/* Effort labels stay hidden until a trace is hot. Opacity for dimming is set in JS. */
+#chart .scatterlayer .trace {
+  transition: opacity 0.2s ease;
 }
 
 #chart .scatterlayer .trace .textpoint {
@@ -515,10 +481,6 @@ html[data-theme="dark"] .chart-tip {
 
 #chart .scatterlayer .trace.is-hot .textpoint {
   opacity: 1;
-}
-
-#chart .scatterlayer .trace.is-hot .js-line {
-  stroke-width: 2.6px !important;
 }
 
 .status {

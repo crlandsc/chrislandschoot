@@ -119,7 +119,7 @@
     pinnedModel: null,
     fadeTimer: 0,
     plotEventsBound: false,
-    tipEl: null,
+    pointer: null,
   };
 
   function setStatus(message, isError) {
@@ -408,99 +408,28 @@
     applyEmphasis();
   }
 
-  function ensureTip() {
-    if (state.tipEl) return state.tipEl;
-    const tip = document.createElement("div");
-    tip.className = "chart-tip";
-    tip.hidden = true;
-    tip.setAttribute("role", "tooltip");
-    els.chartCard.appendChild(tip);
-    state.tipEl = tip;
-    return tip;
-  }
-
-  function hideTip() {
-    const tip = ensureTip();
-    tip.hidden = true;
-    tip.style.borderColor = "";
-  }
-
-  function showTip(pt) {
-    const tip = ensureTip();
-    const colors = plotTheme();
-    const data = pt.customdata || [];
-    // customdata: [effort, y, x, harness, label, yField]
-    const label = data[4] || pt.data.name || "Model";
-    const effort = effortLabel(data[0]);
-    const score = formatScore(Number(data[1]), data[5]);
-    const cost = formatUsd(Number(data[2])) + " per task";
-    const harness = data[3];
-    const scoreName = data[5] === "score_pct" ? "Score" : "Index";
-    const color = Array.isArray(pt.data.marker.color)
-      ? pt.data.marker.color[0]
-      : pt.data.marker.color;
-
-    tip.replaceChildren();
-    const name = document.createElement("div");
-    name.className = "chart-tip-name";
-    name.textContent = label;
-    tip.appendChild(name);
-
-    [
-      ["Effort", effort],
-      [scoreName, score],
-      ["Cost", cost],
-    ].forEach(function (row) {
-      const line = document.createElement("div");
-      line.className = "chart-tip-row";
-      const k = document.createElement("span");
-      k.className = "chart-tip-key";
-      k.textContent = row[0];
-      const v = document.createElement("span");
-      v.textContent = row[1];
-      line.append(k, v);
-      tip.appendChild(line);
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
     });
+  }
+
+  function hoverText(entry, point, axes, colors) {
+    const muted = 'style="color:' + colors.muted + '"';
+    const rows = [
+      "<b>" + escapeHtml(entry.label) + "</b>",
+      "<span " + muted + ">Effort</span>  " + escapeHtml(effortLabel(point.effort)),
+      "<span " + muted + ">" +
+        (axes.y === "score_pct" ? "Score" : "Index") +
+        "</span>  " +
+        formatScore(point[axes.y], axes.y),
+      "<span " + muted + ">Cost</span>  " + formatUsd(point[axes.x]) + " per task",
+    ];
+    const harness = point.harness || (entry.series && entry.series.harness);
     if (harness) {
-      const line = document.createElement("div");
-      line.className = "chart-tip-row chart-tip-muted";
-      const k = document.createElement("span");
-      k.className = "chart-tip-key";
-      k.textContent = "Harness";
-      const v = document.createElement("span");
-      v.textContent = harness;
-      line.append(k, v);
-      tip.appendChild(line);
+      rows.push("<span " + muted + ">Harness</span>  " + escapeHtml(harness));
     }
-
-    tip.style.borderColor = color || colors.line;
-    tip.hidden = false;
-
-    const card = els.chartCard.getBoundingClientRect();
-    const layout = els.chart._fullLayout || {};
-    const size = layout._size || {};
-    const bbox = pt.bbox || {};
-    let pointX;
-    let pointTop;
-    let pointBottom;
-    if (Number.isFinite(bbox.x0) && Number.isFinite(bbox.y0)) {
-      pointX = (bbox.x0 + bbox.x1) / 2 - card.left;
-      pointTop = Math.min(bbox.y0, bbox.y1) - card.top;
-      pointBottom = Math.max(bbox.y0, bbox.y1) - card.top;
-    } else {
-      pointX = (size.l || 0) + pt.xaxis.l2p(pt.x);
-      pointTop = (size.t || 0) + pt.yaxis.l2p(pt.y);
-      pointBottom = pointTop;
-    }
-
-    tip.style.left = "0px";
-    tip.style.top = "0px";
-    const tipRect = tip.getBoundingClientRect();
-    let left = Math.min(Math.max(8, pointX - tipRect.width / 2), card.width - tipRect.width - 8);
-    let top = pointTop - tipRect.height - 10;
-    if (top < 36) top = pointBottom + 12;
-    tip.style.left = Math.round(left) + "px";
-    tip.style.top = Math.round(top) + "px";
+    return rows.join("<br>");
   }
 
   function toggleModels(ids, on) {
@@ -618,7 +547,6 @@
     state.boardId = boardId;
     state.hoverModel = null;
     state.pinnedModel = null;
-    hideTip();
     state.xScale = board.x_scale === "log" ? "log" : "linear";
     state.selected = new Set(
       modelEntries(board).map(function (entry) {
@@ -651,6 +579,8 @@
       grid: dark ? "rgba(255, 255, 255, 0.08)" : "rgba(26, 31, 35, 0.08)",
       line: dark ? "#333333" : "#dee2e6",
       muted: dark ? "#a0a0a0" : "#6c757d",
+      // Soft fill so the caret bubble does not fully bury the lines behind it.
+      tipBg: dark ? "rgba(30, 30, 30, 0.88)" : "rgba(255, 255, 255, 0.9)",
     };
   }
 
@@ -661,8 +591,13 @@
     const nodes = graph ? graph.querySelectorAll(".scatterlayer .trace") : [];
     Array.prototype.forEach.call(nodes, function (node, index) {
       const id = data && data[index] ? data[index].meta : null;
+      const on = !hot || id === hot;
       node.classList.toggle("is-hot", Boolean(hot) && id === hot);
       node.classList.toggle("is-dim", Boolean(hot) && id !== hot);
+      // Plotly SVG groups ignore stylesheet opacity reliably; set it on the node.
+      node.style.opacity = on ? "1" : "0.22";
+      const line = node.querySelector(".js-line");
+      if (line) line.style.strokeWidth = hot && id === hot ? "2.6" : "1.6";
     });
     const chips = els.modelList.querySelectorAll(".model-chip");
     Array.prototype.forEach.call(chips, function (chip) {
@@ -692,26 +627,31 @@
     state.plotEventsBound = true;
     els.chart.on("plotly_hover", function (event) {
       const pt = event.points && event.points[0];
-      if (!pt) return;
-      setHoverModel(pt.data.meta);
-      showTip(pt);
+      if (pt) setHoverModel(pt.data.meta);
     });
     els.chart.on("plotly_unhover", function () {
       setHoverModel(null);
-      hideTip();
     });
-    els.chart.on("plotly_click", function (event) {
-      const pt = event.points && event.points[0];
-      if (!pt) return;
-      const id = pt.data.meta;
-      setPinnedModel(state.pinnedModel === id ? null : id);
-      setHoverModel(id);
-      showTip(pt);
+    // Pin on a true click. Zoom drags move farther than this threshold, so they do not pin.
+    els.chart.addEventListener("pointerdown", function (event) {
+      if (event.button !== 0) return;
+      state.pointer = {
+        x: event.clientX,
+        y: event.clientY,
+        model: state.hoverModel,
+      };
     });
-    els.chart.on("plotly_relayout", function () {
-      hideTip();
-      syncResetButton();
+    els.chart.addEventListener("pointerup", function (event) {
+      const start = state.pointer;
+      state.pointer = null;
+      if (!start || !start.model || event.button !== 0) return;
+      if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) return;
+      setPinnedModel(state.pinnedModel === start.model ? null : start.model);
     });
+    els.chart.addEventListener("pointercancel", function () {
+      state.pointer = null;
+    });
+    els.chart.on("plotly_relayout", syncResetButton);
     els.chart.on("plotly_afterplot", applyEmphasis);
   }
 
@@ -786,17 +726,16 @@
           }),
           textposition: "top center",
           textfont: { size: 11, color: colors.muted, family: FONT },
-          customdata: points.map(function (point) {
-            return [
-              point.effort || "",
-              point[axes.y],
-              point[axes.x],
-              point.harness || (entry.series && entry.series.harness) || "",
-              entry.label,
-              axes.y,
-            ];
+          hovertext: points.map(function (point) {
+            return hoverText(entry, point, axes, colors);
           }),
-          hoverinfo: "none",
+          hovertemplate: "%{hovertext}<extra></extra>",
+          hoverlabel: {
+            bgcolor: colors.tipBg,
+            bordercolor: entry.color,
+            align: "left",
+            font: { family: FONT, size: 13, color: colors.text },
+          },
           cliponaxis: false,
           marker: {
             size: points.length > 1 ? 11 : 13,
