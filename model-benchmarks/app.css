@@ -459,10 +459,6 @@ html[data-theme="dark"] .plotly-notifier .notifier-note {
   background: rgba(30, 30, 30, 0.88) !important;
 }
 
-.model-chip.is-pinned {
-  border-color: var(--clr-accent-primary);
-}
-
 /* Plotly draws the caret bubble as SVG; soften the fill a touch via opacity on the path. */
 #chart .hoverlayer .hovertext path {
   opacity: 0.94;

@@ -116,10 +116,8 @@
     selected: new Set(),
     xScale: "linear",
     hoverModel: null,
-    pinnedModel: null,
     fadeTimer: 0,
     plotEventsBound: false,
-    pointer: null,
     hoverLayer: null,
     hoverObserver: null,
     tooltipModel: null,
@@ -396,18 +394,9 @@
     });
   }
 
-  function activeModelId() {
-    return state.hoverModel || state.pinnedModel || null;
-  }
-
   function setHoverModel(id) {
     if (state.hoverModel === id) return;
     state.hoverModel = id;
-    applyEmphasis();
-  }
-
-  function setPinnedModel(id) {
-    state.pinnedModel = id || null;
     applyEmphasis();
   }
 
@@ -440,7 +429,6 @@
       if (on) state.selected.add(id);
       else state.selected.delete(id);
     });
-    if (state.pinnedModel && !state.selected.has(state.pinnedModel)) setPinnedModel(null);
     renderModels();
     drawChart();
   }
@@ -464,9 +452,7 @@
       return button;
     }
     button.addEventListener("click", function () {
-      const turningOff = state.selected.has(entry.id);
-      if (turningOff && state.pinnedModel === entry.id) setPinnedModel(null);
-      toggleModels([entry.id], !turningOff);
+      toggleModels([entry.id], !state.selected.has(entry.id));
     });
     button.addEventListener("mouseenter", function () {
       setHoverModel(entry.id);
@@ -533,7 +519,6 @@
   function selectAll(on) {
     const board = getBoard(state.boardId);
     state.selected = new Set();
-    if (!on) setPinnedModel(null);
     if (on) {
       modelEntries(board).forEach(function (entry) {
         state.selected.add(entry.id);
@@ -549,7 +534,6 @@
     const firstPaint = !state.boardId;
     state.boardId = boardId;
     state.hoverModel = null;
-    state.pinnedModel = null;
     state.xScale = board.x_scale === "log" ? "log" : "linear";
     state.selected = new Set(
       modelEntries(board).map(function (entry) {
@@ -590,7 +574,7 @@
   function applyEmphasis() {
     const graph = els.chart;
     const data = graph && graph.data;
-    const hot = activeModelId();
+    const hot = state.hoverModel;
     const nodes = graph ? graph.querySelectorAll(".scatterlayer .trace") : [];
     Array.prototype.forEach.call(nodes, function (node, index) {
       const id = data && data[index] ? data[index].meta : null;
@@ -606,7 +590,6 @@
     Array.prototype.forEach.call(chips, function (chip) {
       const id = chip.dataset.modelId;
       chip.classList.toggle("is-hot", id === hot);
-      chip.classList.toggle("is-pinned", id === state.pinnedModel);
     });
   }
 
@@ -634,7 +617,7 @@
   }
 
   // Nearest ladder to the pointer, measured against markers and the segments between them,
-  // so hovering or clicking anywhere along a line resolves to that model.
+  // so hovering anywhere along a line highlights that model.
   function nearestModel(clientX, clientY, maxDistance) {
     const graph = els.chart;
     const layout = graph && graph._fullLayout;
@@ -736,24 +719,6 @@
     els.chart.addEventListener("pointerleave", function () {
       state.tooltipModel = null;
       setHoverModel(null);
-    });
-    // A click on or near a line pins it; a click on empty plot clears the pin. Zoom drags
-    // travel farther than the threshold and are ignored.
-    els.chart.addEventListener("pointerdown", function (event) {
-      if (event.button !== 0) return;
-      state.pointer = { x: event.clientX, y: event.clientY };
-    });
-    els.chart.addEventListener("pointerup", function (event) {
-      const start = state.pointer;
-      state.pointer = null;
-      if (!start || event.button !== 0) return;
-      if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 6) return;
-      const id = state.hoverModel || nearestModel(event.clientX, event.clientY, 14);
-      if (id) setPinnedModel(state.pinnedModel === id ? null : id);
-      else if (event.target.classList && event.target.classList.contains("nsewdrag")) setPinnedModel(null);
-    });
-    els.chart.addEventListener("pointercancel", function () {
-      state.pointer = null;
     });
     els.chart.on("plotly_relayout", syncResetButton);
     els.chart.on("plotly_afterplot", function () {
