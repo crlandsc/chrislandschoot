@@ -409,6 +409,9 @@
         tickfont: { color: colors.muted },
         titlefont: { color: colors.text },
         automargin: true,
+        // Decade ticks on log boards (SciCode); default 1-2-5 labels get noisy.
+        dtick: xScale === "log" ? 1 : undefined,
+        tickformat: xScale === "log" ? "~g" : undefined,
       },
       yaxis: {
         title: { text: humanizeField(yField) },
