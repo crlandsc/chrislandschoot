@@ -15,14 +15,14 @@
   <link rel="preload" href="../assets/fonts/Brandon-Grotesque/Brandon-Light.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="../assets/fonts/Brandon-Grotesque/Brandon-Medium.otf" as="font" type="font/otf" crossorigin>
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="app.css?v=2">
+  <link rel="stylesheet" href="app.css?v=3">
   <script>
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       document.documentElement.setAttribute("data-theme", "dark");
     }
   </script>
 </head>
-<body>
+<body class="bench">
   <header>
     <div class="container">
       <a href="/" class="logo">CHRISTOPHER LANDSCHOOT</a>
@@ -57,35 +57,40 @@
     </div>
 
     <section class="stage" aria-label="Chart">
-      <div class="container">
+      <div class="container stage-inner">
         <div class="filters">
           <div class="filters-head">
             <h2>Models <span id="model-count" class="count"></span></h2>
-            <div class="model-actions">
+            <div class="inline-actions">
               <button type="button" id="models-all" class="text-btn">All</button>
               <span class="sep" aria-hidden="true">·</span>
               <button type="button" id="models-none" class="text-btn">None</button>
             </div>
           </div>
-          <div class="model-list" id="model-list"></div>
-        </div>
-
-        <div class="readout" id="readout">
-          <span class="readout-swatch" id="readout-swatch" hidden></span>
-          <p class="readout-text" id="readout-text">Hover a point for details. Click to hold it.</p>
-          <button type="button" class="text-btn" id="readout-clear" hidden>Clear</button>
+          <div class="model-groups" id="model-list"></div>
         </div>
 
         <div class="chart-card" id="chart-card">
+          <div class="chart-toolbar">
+            <div class="segmented" role="group" aria-label="Cost axis scale">
+              <span class="toolbar-label">Cost axis</span>
+              <button type="button" data-scale="linear" aria-pressed="false">Linear</button>
+              <button type="button" data-scale="log" aria-pressed="false">Log</button>
+            </div>
+            <div class="inline-actions">
+              <button type="button" id="reset-view" class="text-btn" disabled>Reset view</button>
+              <span class="sep" aria-hidden="true">·</span>
+              <button type="button" id="download" class="text-btn">Save PNG</button>
+            </div>
+          </div>
           <div id="chart" role="img" aria-labelledby="board-title"></div>
         </div>
-        <p class="chart-note" id="chart-note"></p>
         <p id="status" class="status" role="status"></p>
       </div>
     </section>
   </main>
 
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
-  <script src="app.js?v=2" defer></script>
+  <script src="app.js?v=3" defer></script>
 </body>
 </html>

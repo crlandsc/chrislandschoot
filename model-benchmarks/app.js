@@ -27,9 +27,44 @@
     medium: "Medium",
     high: "High",
     extra: "Extra",
-    xhigh: "Extra high",
+    xhigh: "Extra",
     max: "Max",
   };
+
+  // Chip groups, left to right. Models not listed in MODEL_PROVIDERS fall back to `match` on the label.
+  const PROVIDERS = [
+    { id: "anthropic", label: "Anthropic", match: /claude|opus|sonnet|haiku|fable/i },
+    { id: "openai", label: "OpenAI", match: /gpt|codex|\bo\d/i },
+    { id: "google", label: "Google", match: /gemini|gemma/i },
+    { id: "spacexai", label: "SpaceXAI", match: /grok/i },
+  ];
+  const OTHER_PROVIDER = { id: "other", label: "Other" };
+  const MODEL_PROVIDERS = {
+    sonnet55: "anthropic",
+    opus55: "anthropic",
+    fable: "anthropic",
+    opus48: "anthropic",
+    astra: "openai",
+    sol6: "openai",
+    luna: "openai",
+    sol: "openai",
+    grok47: "spacexai",
+    grok46: "spacexai",
+  };
+  // Newest first within each provider. Models missing from this list sort to the front of their group.
+  const MODEL_RECENCY = [
+    "sonnet55",
+    "opus55",
+    "fable",
+    "opus48",
+    "astra",
+    "sol6",
+    "luna",
+    "sol",
+    "grok47",
+    "grok46",
+  ];
+
   const FALLBACK_COLORS = [
     "#4A90E2",
     "#D55E00",
@@ -65,23 +100,22 @@
     modelList: document.getElementById("model-list"),
     modelCount: document.getElementById("model-count"),
     boardTitle: document.getElementById("board-title"),
-    chartNote: document.getElementById("chart-note"),
     chartCard: document.getElementById("chart-card"),
     chart: document.getElementById("chart"),
     themeToggle: document.getElementById("theme-toggle"),
     allBtn: document.getElementById("models-all"),
     noneBtn: document.getElementById("models-none"),
-    readoutText: document.getElementById("readout-text"),
-    readoutSwatch: document.getElementById("readout-swatch"),
-    readoutClear: document.getElementById("readout-clear"),
+    scaleButtons: document.querySelectorAll(".segmented [data-scale]"),
+    resetBtn: document.getElementById("reset-view"),
+    downloadBtn: document.getElementById("download"),
   };
 
   const state = {
     payload: null,
     boardId: null,
     selected: new Set(),
+    xScale: "linear",
     hoverModel: null,
-    pinned: null,
     fadeTimer: 0,
     plotEventsBound: false,
   };
@@ -97,17 +131,14 @@
 
   function applyTheme(theme) {
     const html = document.documentElement;
-    const isDark = theme === "dark";
-    if (isDark) {
+    if (theme === "dark") {
       html.setAttribute("data-theme", "dark");
       els.themeToggle.setAttribute("aria-label", "Switch to light mode");
     } else {
       html.removeAttribute("data-theme");
       els.themeToggle.setAttribute("aria-label", "Switch to dark mode");
     }
-    if (state.payload && state.boardId) {
-      drawChart();
-    }
+    if (state.payload && state.boardId) drawChart();
   }
 
   function initTheme() {
@@ -137,15 +168,19 @@
 
   function formatScore(value, yField) {
     if (!Number.isFinite(value)) return "n/a";
-    const digits = Math.abs(value) >= 10 ? 1 : 2;
-    const text = value.toFixed(digits);
+    const text = value.toFixed(Math.abs(value) >= 10 ? 1 : 2);
     return yField === "score_pct" ? text + "%" : text;
   }
 
   function effortLabel(value) {
     if (!value) return "n/a";
-    const key = String(value).toLowerCase();
-    return EFFORT_LABELS[key] || String(value);
+    return EFFORT_LABELS[String(value).toLowerCase()] || String(value);
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
   }
 
   function boardIds(payload) {
@@ -173,9 +208,8 @@
   }
 
   function modelEntries(board) {
-    if (!board) return [];
+    if (!board || !board.models) return [];
     const models = board.models;
-    if (!models) return [];
     if (Array.isArray(models)) {
       return models
         .map(function (item, index) {
@@ -209,27 +243,72 @@
   }
 
   function colorFor(id, index) {
-    const colors = styleMaps().colors;
-    return colors[id] || FALLBACK_COLORS[index % FALLBACK_COLORS.length];
+    return styleMaps().colors[id] || FALLBACK_COLORS[index % FALLBACK_COLORS.length];
   }
 
   function markerFor(id) {
-    const markers = styleMaps().markers;
-    return MATPLOTLIB_TO_PLOTLY[markers[id]] || "circle";
+    return MATPLOTLIB_TO_PLOTLY[styleMaps().markers[id]] || "circle";
   }
 
   function labelFor(id, series) {
-    const labels = styleMaps().labels;
-    return (series && series.label) || labels[id] || id;
+    return (series && series.label) || styleMaps().labels[id] || id;
+  }
+
+  function providerFor(id, label) {
+    const known = MODEL_PROVIDERS[id];
+    const provider = PROVIDERS.find(function (p) {
+      return known ? p.id === known : p.match.test(label);
+    });
+    return provider || OTHER_PROVIDER;
+  }
+
+  function recencyRank(id) {
+    const index = MODEL_RECENCY.indexOf(id);
+    return index === -1 ? -1 : index;
+  }
+
+  function groupedEntries(board) {
+    const entries = modelEntries(board).map(function (entry, index) {
+      const label = labelFor(entry.id, entry.series);
+      return {
+        id: entry.id,
+        series: entry.series,
+        label: label,
+        color: colorFor(entry.id, index),
+        provider: providerFor(entry.id, label),
+        order: index,
+      };
+    });
+    const groups = PROVIDERS.concat([OTHER_PROVIDER]).map(function (provider) {
+      return {
+        provider: provider,
+        entries: entries
+          .filter(function (entry) {
+            return entry.provider.id === provider.id;
+          })
+          .sort(function (a, b) {
+            return recencyRank(a.id) - recencyRank(b.id) || a.order - b.order;
+          }),
+      };
+    });
+    return groups.filter(function (group) {
+      return group.entries.length > 0;
+    });
   }
 
   function shortTitle(boardId, board) {
     return BOARD_SHORT_TITLES[boardId] || (board && board.title) || boardId;
   }
 
+  function boardAxes(board) {
+    return {
+      x: (board && board.x) || "cost_per_task_usd",
+      y: board && board.y,
+    };
+  }
+
   function hashBoardId() {
-    const raw = (window.location.hash || "").replace(/^#/, "");
-    return raw || null;
+    return (window.location.hash || "").replace(/^#/, "") || null;
   }
 
   function setHash(boardId) {
@@ -243,8 +322,7 @@
     const raw = board && board.source;
     if (!raw || typeof raw !== "string") return "";
     if (raw.indexOf("{") !== -1) {
-      if (raw.indexOf("artificialanalysis.ai") !== -1) return "https://artificialanalysis.ai/";
-      return "";
+      return raw.indexOf("artificialanalysis.ai") !== -1 ? "https://artificialanalysis.ai/" : "";
     }
     return raw;
   }
@@ -255,95 +333,23 @@
     return "Updated " + String(raw).replace(" ~", ", ").replace("~", " ");
   }
 
-  function appendSep(parent) {
-    const sep = document.createElement("span");
-    sep.className = "sep";
-    sep.setAttribute("aria-hidden", "true");
-    sep.textContent = "·";
-    parent.appendChild(sep);
-  }
-
-  function showPlaceholder() {
-    els.readoutSwatch.hidden = true;
-    els.readoutClear.hidden = true;
-    els.readoutText.className = "readout-text is-placeholder";
-    els.readoutText.textContent = "Hover a point for details. Click to hold it.";
-  }
-
-  function showReadout(info, pinned) {
-    els.readoutSwatch.hidden = false;
-    els.readoutSwatch.style.background = info.color || "transparent";
-    els.readoutClear.hidden = !pinned;
-    els.readoutText.className = "readout-text";
-    els.readoutText.replaceChildren();
-
-    if (pinned) {
-      const held = document.createElement("span");
-      held.className = "muted";
-      held.textContent = "Held";
-      els.readoutText.appendChild(held);
-      appendSep(els.readoutText);
+  function updateSource(board) {
+    const href = sourceHref(board);
+    els.sourceLink.hidden = !href;
+    els.sourceSep.hidden = !href;
+    if (!href) {
+      els.sourceLink.removeAttribute("href");
+      return;
     }
-
-    const name = document.createElement("span");
-    name.className = "readout-name";
-    name.textContent = info.label || "Model";
-    els.readoutText.appendChild(name);
-
-    const bits = info.bits || [];
-    bits.forEach(function (bit) {
-      appendSep(els.readoutText);
-      const span = document.createElement("span");
-      if (bit.muted) span.className = "muted";
-      span.textContent = bit.text;
-      els.readoutText.appendChild(span);
-    });
+    els.sourceLink.href = href;
+    els.sourceLink.target = "_blank";
+    els.sourceLink.rel = "noopener noreferrer";
   }
 
-  function pointInfo(pt) {
-    const data = pt.customdata || [];
-    const yField = data[5];
-    const harness = data[3];
-    const bits = [
-      { text: effortLabel(data[0]) },
-      { text: formatScore(Number(data[1]), yField) },
-      { text: formatUsd(Number(data[2])) + " / task" },
-    ];
-    if (harness) bits.push({ text: harness, muted: true });
-    return {
-      key: String(pt.data.meta) + "|" + String(data[0]) + "|" + String(data[2]),
-      modelId: pt.data.meta,
-      color: markerColor(pt),
-      label: data[4] || pt.data.name,
-      bits: bits,
-    };
-  }
-
-  function markerColor(pt) {
-    const color = pt.data && pt.data.marker ? pt.data.marker.color : "";
-    return Array.isArray(color) ? color[0] : color;
-  }
-
-  function showPoint(pt, pinned) {
-    showReadout(pointInfo(pt), pinned);
-  }
-
-  function showModelSummary(entry, index) {
-    const board = getBoard(state.boardId);
-    const xField = (board && board.x) || "cost_per_task_usd";
-    const yField = board && board.y;
-    const series = entry.series || {};
-    const points = validPoints(series, xField, yField);
-    const bits = [{ text: points.length + (points.length === 1 ? " effort" : " efforts") }];
-    if (series.harness) bits.push({ text: series.harness, muted: true });
-    showReadout(
-      {
-        label: labelFor(entry.id, series),
-        color: colorFor(entry.id, index),
-        bits: bits,
-      },
-      false
-    );
+  function updateChrome(board) {
+    els.boardTitle.textContent = (board && board.title) || shortTitle(state.boardId, board);
+    document.title = shortTitle(state.boardId, board) + " · Cost vs score";
+    updateSource(board);
   }
 
   function updateCount() {
@@ -352,48 +358,25 @@
     els.modelCount.textContent = selected === total ? String(total) : selected + " of " + total;
   }
 
-  function updateSource(board) {
-    const href = sourceHref(board);
-    if (!href) {
-      els.sourceLink.hidden = true;
-      els.sourceSep.hidden = true;
-      els.sourceLink.removeAttribute("href");
-      return;
-    }
-    els.sourceLink.href = href;
-    els.sourceLink.target = "_blank";
-    els.sourceLink.rel = "noopener noreferrer";
-    els.sourceLink.hidden = false;
-    els.sourceSep.hidden = false;
-  }
-
-  function updateChrome(board, extraNote) {
-    const title = (board && board.title) || shortTitle(state.boardId, board);
-    els.boardTitle.textContent = title;
-    document.title = shortTitle(state.boardId, board) + " · Cost vs score";
-    updateSource(board);
-    const notes = [
-      "Each line is one model. Points are effort levels, from cheaper to more expensive.",
-    ];
-    if (board && board.x_scale === "log") notes.push("Cost is on a log scale.");
-    if (extraNote) notes.push(extraNote);
-    els.chartNote.textContent = notes.join(" ");
+  function updateScaleButtons() {
+    Array.prototype.forEach.call(els.scaleButtons, function (button) {
+      button.setAttribute("aria-pressed", button.dataset.scale === state.xScale ? "true" : "false");
+    });
   }
 
   function renderTabs() {
     const ids = boardIds(state.payload);
     els.tabs.replaceChildren();
     ids.forEach(function (id) {
-      const board = getBoard(id);
       const button = document.createElement("button");
       button.type = "button";
       button.setAttribute("role", "tab");
       button.id = "tab-" + id;
       button.dataset.boardId = id;
       button.setAttribute("aria-selected", id === state.boardId ? "true" : "false");
-      button.tabIndex = id === state.boardId ? 0 : -1;
       button.setAttribute("aria-controls", "chart");
-      button.textContent = shortTitle(id, board);
+      button.tabIndex = id === state.boardId ? 0 : -1;
+      button.textContent = shortTitle(id, getBoard(id));
       button.addEventListener("click", function () {
         selectBoard(id);
       });
@@ -414,68 +397,107 @@
     });
   }
 
+  function setHoverModel(id) {
+    if (state.hoverModel === id) return;
+    state.hoverModel = id;
+    applyEmphasis();
+  }
+
+  function toggleModels(ids, on) {
+    ids.forEach(function (id) {
+      if (on) state.selected.add(id);
+      else state.selected.delete(id);
+    });
+    renderModels();
+    drawChart();
+  }
+
+  function buildChip(entry, hasPoints) {
+    const button = document.createElement("button");
+    const swatch = document.createElement("span");
+    const text = document.createElement("span");
+    button.type = "button";
+    button.className = "model-chip";
+    button.dataset.modelId = entry.id;
+    button.setAttribute("aria-pressed", state.selected.has(entry.id) ? "true" : "false");
+    swatch.className = "swatch";
+    swatch.style.background = entry.color;
+    text.textContent = entry.label;
+    button.append(swatch, text);
+    if (!hasPoints) {
+      button.classList.add("is-empty");
+      button.title = "No results on this board";
+      button.setAttribute("aria-disabled", "true");
+      return button;
+    }
+    button.addEventListener("click", function () {
+      toggleModels([entry.id], !state.selected.has(entry.id));
+    });
+    button.addEventListener("mouseenter", function () {
+      setHoverModel(entry.id);
+    });
+    button.addEventListener("mouseleave", function () {
+      setHoverModel(null);
+    });
+    button.addEventListener("focus", function () {
+      setHoverModel(entry.id);
+    });
+    button.addEventListener("blur", function () {
+      setHoverModel(null);
+    });
+    return button;
+  }
+
   function renderModels() {
     const board = getBoard(state.boardId);
-    const entries = modelEntries(board);
+    const axes = boardAxes(board);
+    const focusedId = document.activeElement && document.activeElement.dataset
+      ? document.activeElement.dataset.modelId || document.activeElement.dataset.providerId
+      : null;
     els.modelList.replaceChildren();
-    entries.forEach(function (entry, index) {
-      const button = document.createElement("button");
-      const swatch = document.createElement("span");
-      const text = document.createElement("span");
-      button.type = "button";
-      button.className = "model-chip";
-      button.dataset.modelId = entry.id;
-      button.setAttribute("aria-pressed", state.selected.has(entry.id) ? "true" : "false");
-      swatch.className = "swatch";
-      swatch.style.background = colorFor(entry.id, index);
-      text.textContent = labelFor(entry.id, entry.series);
-      button.append(swatch, text);
-      button.addEventListener("click", function () {
-        if (state.selected.has(entry.id)) state.selected.delete(entry.id);
-        else state.selected.add(entry.id);
-        button.setAttribute("aria-pressed", state.selected.has(entry.id) ? "true" : "false");
-        if (state.pinned && state.pinned.modelId === entry.id && !state.selected.has(entry.id)) {
-          state.pinned = null;
-          showPlaceholder();
-        }
-        updateCount();
-        drawChart();
+    groupedEntries(board).forEach(function (group) {
+      const wrap = document.createElement("div");
+      const label = document.createElement("button");
+      const chips = document.createElement("div");
+      const plottable = group.entries
+        .filter(function (entry) {
+          return validPoints(entry.series || {}, axes.x, axes.y).length > 0;
+        })
+        .map(function (entry) {
+          return entry.id;
+        });
+      wrap.className = "model-group";
+      label.type = "button";
+      label.className = "group-label";
+      label.dataset.providerId = group.provider.id;
+      label.textContent = group.provider.label;
+      label.title = "Toggle all " + group.provider.label + " models";
+      label.addEventListener("click", function () {
+        const allOn = plottable.every(function (id) {
+          return state.selected.has(id);
+        });
+        toggleModels(plottable, !allOn);
       });
-      button.addEventListener("mouseenter", function () {
-        state.hoverModel = entry.id;
-        if (!state.pinned) showModelSummary(entry, index);
-        applyEmphasis();
+      chips.className = "group-chips";
+      group.entries.forEach(function (entry) {
+        chips.appendChild(buildChip(entry, plottable.indexOf(entry.id) !== -1));
       });
-      button.addEventListener("mouseleave", function () {
-        if (state.hoverModel === entry.id) state.hoverModel = null;
-        if (state.pinned) showReadout(state.pinned, true);
-        else showPlaceholder();
-        applyEmphasis();
-      });
-      button.addEventListener("focus", function () {
-        state.hoverModel = entry.id;
-        if (!state.pinned) showModelSummary(entry, index);
-        applyEmphasis();
-      });
-      button.addEventListener("blur", function () {
-        if (state.hoverModel === entry.id) state.hoverModel = null;
-        if (state.pinned) showReadout(state.pinned, true);
-        else showPlaceholder();
-        applyEmphasis();
-      });
-      els.modelList.appendChild(button);
+      wrap.append(label, chips);
+      els.modelList.appendChild(wrap);
     });
+    if (focusedId) {
+      const again = els.modelList.querySelector(
+        '[data-model-id="' + focusedId + '"], [data-provider-id="' + focusedId + '"]'
+      );
+      if (again) again.focus();
+    }
     updateCount();
+    applyEmphasis();
   }
 
   function selectAll(on) {
     const board = getBoard(state.boardId);
     state.selected = new Set();
-    state.hoverModel = null;
-    if (!on) {
-      state.pinned = null;
-      showPlaceholder();
-    }
     if (on) {
       modelEntries(board).forEach(function (entry) {
         state.selected.add(entry.id);
@@ -491,15 +513,15 @@
     const firstPaint = !state.boardId;
     state.boardId = boardId;
     state.hoverModel = null;
-    state.pinned = null;
+    state.xScale = board.x_scale === "log" ? "log" : "linear";
     state.selected = new Set(
       modelEntries(board).map(function (entry) {
         return entry.id;
       })
     );
     setHash(boardId);
-    showPlaceholder();
     updateChrome(board);
+    updateScaleButtons();
     renderTabs();
     renderModels();
     if (firstPaint || immediate) {
@@ -518,7 +540,6 @@
     const dark = currentTheme() === "dark";
     return {
       paper: dark ? "#121212" : "#ffffff",
-      plot: dark ? "#121212" : "#ffffff",
       text: dark ? "#e0e0e0" : "#212529",
       heading: dark ? "#f5f5f5" : "#1a1f23",
       grid: dark ? "rgba(255, 255, 255, 0.08)" : "rgba(26, 31, 35, 0.08)",
@@ -527,30 +548,15 @@
     };
   }
 
-  function activeModelId() {
-    return state.hoverModel || (state.pinned && state.pinned.modelId) || null;
-  }
-
   function applyEmphasis() {
     const graph = els.chart;
-    if (typeof Plotly === "undefined" || !graph || !graph.data || !graph.data.length) return;
-    const hot = activeModelId();
-    const opacities = [];
-    const widths = [];
-    const modes = [];
-    graph.data.forEach(function (trace) {
-      const on = !hot || trace.meta === hot;
-      const count = (trace.x || []).length;
-      opacities.push(on ? 1 : 0.28);
-      widths.push(on && hot ? 2.6 : 1.6);
-      if (count > 1 && on && hot) modes.push("lines+markers+text");
-      else if (count > 1) modes.push("lines+markers");
-      else modes.push("markers");
-    });
-    Plotly.restyle(graph, {
-      opacity: opacities,
-      "line.width": widths,
-      mode: modes,
+    const data = graph && graph.data;
+    const hot = state.hoverModel;
+    const nodes = graph ? graph.querySelectorAll(".scatterlayer .trace") : [];
+    Array.prototype.forEach.call(nodes, function (node, index) {
+      const id = data && data[index] ? data[index].meta : null;
+      node.classList.toggle("is-hot", Boolean(hot) && id === hot);
+      node.classList.toggle("is-dim", Boolean(hot) && id !== hot);
     });
     const chips = els.modelList.querySelectorAll(".model-chip");
     Array.prototype.forEach.call(chips, function (chip) {
@@ -558,42 +564,79 @@
     });
   }
 
-  function onHover(event) {
-    const pt = event.points && event.points[0];
-    if (!pt) return;
-    const info = pointInfo(pt);
-    state.hoverModel = pt.data.meta;
-    if (!(state.pinned && state.pinned.key === info.key)) showPoint(pt, false);
-    applyEmphasis();
+  function isZoomed() {
+    const layout = els.chart && els.chart._fullLayout;
+    if (!layout || !layout.xaxis || !layout.yaxis) return false;
+    return !(layout.xaxis.autorange && layout.yaxis.autorange);
   }
 
-  function onUnhover() {
-    state.hoverModel = null;
-    if (state.pinned) showReadout(state.pinned, true);
-    else showPlaceholder();
-    applyEmphasis();
+  function syncResetButton() {
+    els.resetBtn.disabled = !isZoomed();
   }
 
-  function onClick(event) {
-    const pt = event.points && event.points[0];
-    if (!pt) return;
-    const info = pointInfo(pt);
-    if (state.pinned && state.pinned.key === info.key) {
-      state.pinned = null;
-      showPoint(pt, false);
-    } else {
-      state.pinned = info;
-      showReadout(info, true);
-    }
-    applyEmphasis();
+  function resetView() {
+    if (typeof Plotly === "undefined" || !els.chart.data) return;
+    Plotly.relayout(els.chart, { "xaxis.autorange": true, "yaxis.autorange": true });
   }
 
   function ensurePlotEvents() {
-    if (state.plotEventsBound || !els.chart || typeof els.chart.on !== "function") return;
+    if (state.plotEventsBound || typeof els.chart.on !== "function") return;
     state.plotEventsBound = true;
-    els.chart.on("plotly_hover", onHover);
-    els.chart.on("plotly_unhover", onUnhover);
-    els.chart.on("plotly_click", onClick);
+    els.chart.on("plotly_hover", function (event) {
+      const pt = event.points && event.points[0];
+      if (pt) setHoverModel(pt.data.meta);
+    });
+    els.chart.on("plotly_unhover", function () {
+      setHoverModel(null);
+    });
+    els.chart.on("plotly_relayout", syncResetButton);
+    els.chart.on("plotly_afterplot", applyEmphasis);
+  }
+
+  function tickUsd(value) {
+    return "$" + Number(value.toPrecision(1)).toString();
+  }
+
+  // Plotly drops tickprefix on minor log labels, so log ticks are built by hand: 1-2-5 for
+  // narrow ranges, decades only once the data spans two or more.
+  function logTicks(traces) {
+    let min = Infinity;
+    let max = -Infinity;
+    traces.forEach(function (trace) {
+      trace.x.forEach(function (x) {
+        if (x > 0) {
+          min = Math.min(min, x);
+          max = Math.max(max, x);
+        }
+      });
+    });
+    if (!Number.isFinite(min)) return {};
+    const steps = Math.log10(max / min) < 2 ? [1, 2, 5] : [1];
+    const values = [];
+    for (let exp = Math.floor(Math.log10(min)) - 1; exp <= Math.ceil(Math.log10(max)) + 1; exp += 1) {
+      steps.forEach(function (step) {
+        values.push(step * Math.pow(10, exp));
+      });
+    }
+    return {
+      tickmode: "array",
+      tickvals: values,
+      ticktext: values.map(tickUsd),
+    };
+  }
+
+  function hoverText(entry, point, axes, colors) {
+    const muted = 'style="color:' + colors.muted + '"';
+    const rows = [
+      "<b>" + escapeHtml(entry.label) + "</b>",
+      "<span " + muted + ">Effort</span>  " + escapeHtml(effortLabel(point.effort)),
+      "<span " + muted + ">" + (axes.y === "score_pct" ? "Score" : "Index") + "</span>  " +
+        formatScore(point[axes.y], axes.y),
+      "<span " + muted + ">Cost</span>  " + formatUsd(point[axes.x]) + " per task",
+    ];
+    const harness = point.harness || (entry.series && entry.series.harness);
+    if (harness) rows.push("<span " + muted + ">Harness</span>  " + escapeHtml(harness));
+    return rows.join("<br>");
   }
 
   function drawChart() {
@@ -601,127 +644,110 @@
       setStatus("Plotly failed to load.", true);
       return;
     }
-
     const board = getBoard(state.boardId);
     if (!board) {
       setStatus("Board not found in snapshot.", true);
       return;
     }
 
-    const xField = board.x || "cost_per_task_usd";
-    const yField = board.y;
-    const xScale = board.x_scale === "log" ? "log" : "linear";
+    const axes = boardAxes(board);
+    const xScale = state.xScale;
     const colors = plotTheme();
-    const entries = modelEntries(board);
     const traces = [];
-    let plotted = 0;
-    let skipped = 0;
 
-    entries.forEach(function (entry, index) {
-      if (!state.selected.has(entry.id)) return;
-      const series = entry.series || {};
-      const points = validPoints(series, xField, yField);
-      if (!points.length) {
-        skipped += 1;
-        return;
-      }
-      plotted += 1;
-      const modelLabel = labelFor(entry.id, series);
-      const color = colorFor(entry.id, index);
-      traces.push({
-        type: "scatter",
-        mode: points.length > 1 ? "lines+markers" : "markers",
-        name: modelLabel,
-        meta: entry.id,
-        x: points.map(function (point) {
-          return point[xField];
-        }),
-        y: points.map(function (point) {
-          return point[yField];
-        }),
-        text: points.map(function (point) {
-          return effortLabel(point.effort);
-        }),
-        textposition: "top center",
-        textfont: { size: 11, color: colors.muted, family: FONT },
-        customdata: points.map(function (point) {
-          return [
-            point.effort || "",
-            point[yField],
-            point[xField],
-            point.harness || series.harness || "",
-            modelLabel,
-            yField,
-          ];
-        }),
-        hoverinfo: "none",
-        hovertemplate: "",
-        cliponaxis: false,
-        marker: {
-          size: points.length > 1 ? 11 : 13,
-          color: color,
-          symbol: markerFor(entry.id),
-          line: { width: 1, color: colors.paper },
-        },
-        line: {
-          color: color,
-          width: 1.6,
-        },
+    groupedEntries(board).forEach(function (group) {
+      group.entries.forEach(function (entry) {
+        if (!state.selected.has(entry.id)) return;
+        const points = validPoints(entry.series || {}, axes.x, axes.y).filter(function (point) {
+          return xScale !== "log" || point[axes.x] > 0;
+        });
+        if (!points.length) return;
+        traces.push({
+          type: "scatter",
+          mode: points.length > 1 ? "lines+markers+text" : "markers+text",
+          name: entry.label,
+          meta: entry.id,
+          x: points.map(function (point) {
+            return point[axes.x];
+          }),
+          y: points.map(function (point) {
+            return point[axes.y];
+          }),
+          text: points.map(function (point) {
+            return effortLabel(point.effort);
+          }),
+          textposition: "top center",
+          textfont: { size: 11, color: colors.muted, family: FONT },
+          hovertext: points.map(function (point) {
+            return hoverText(entry, point, axes, colors);
+          }),
+          hovertemplate: "%{hovertext}<extra></extra>",
+          hoverlabel: {
+            bgcolor: colors.paper,
+            bordercolor: entry.color,
+            align: "left",
+            font: { family: FONT, size: 13, color: colors.text },
+          },
+          cliponaxis: false,
+          marker: {
+            size: points.length > 1 ? 11 : 13,
+            color: entry.color,
+            symbol: markerFor(entry.id),
+            line: { width: 1, color: colors.paper },
+          },
+          line: { color: entry.color, width: 1.6 },
+        });
       });
     });
 
-    const skippedNote = skipped
-      ? skipped + (skipped === 1 ? " model has" : " models have") + " no points on this board."
-      : "";
-    updateChrome(board, skippedNote);
-
+    const axisTitleFont = { family: FONT, size: 13, color: colors.muted };
+    const tickFont = { family: FONT, size: 12, color: colors.muted };
+    const xTicks = xScale === "log" ? logTicks(traces) : { tickprefix: "$" };
     const layout = {
-      margin: { l: 68, r: 36, t: 28, b: 72 },
+      uirevision: state.boardId + ":" + xScale,
+      margin: { l: 68, r: 36, t: 24, b: 64 },
       paper_bgcolor: colors.paper,
-      plot_bgcolor: colors.plot,
+      plot_bgcolor: colors.paper,
       font: { color: colors.text, family: FONT, size: 13 },
       showlegend: false,
       hovermode: "closest",
       hoverdistance: 28,
-      dragmode: false,
-      xaxis: {
-        title: { text: "Cost per task", font: { family: FONT, size: 13, color: colors.muted } },
-        type: xScale,
-        showgrid: true,
-        gridcolor: colors.grid,
-        zeroline: false,
-        linecolor: colors.line,
-        tickfont: { family: FONT, color: colors.muted, size: 12 },
-        tickprefix: "$",
-        automargin: true,
-        dtick: xScale === "log" ? 1 : undefined,
-        tickformat: xScale === "log" ? "~g" : undefined,
-      },
+      dragmode: "zoom",
+      xaxis: Object.assign(
+        {
+          title: { text: "Cost per task", font: axisTitleFont },
+          type: xScale,
+          showgrid: true,
+          gridcolor: colors.grid,
+          zeroline: false,
+          linecolor: colors.line,
+          tickfont: tickFont,
+          automargin: true,
+        },
+        xTicks
+      ),
       yaxis: {
-        title: { text: humanizeField(yField), font: { family: FONT, size: 13, color: colors.muted } },
+        title: { text: humanizeField(axes.y), font: axisTitleFont },
         showgrid: true,
         gridcolor: colors.grid,
         zeroline: false,
         linecolor: colors.line,
-        tickfont: { family: FONT, color: colors.muted, size: 12 },
+        tickfont: tickFont,
         automargin: true,
       },
-      annotations:
-        plotted === 0
-          ? [
-              {
-                text: skipped
-                  ? "Selected models have no usable points on this board."
-                  : "Select at least one model.",
-                showarrow: false,
-                xref: "paper",
-                yref: "paper",
-                x: 0.5,
-                y: 0.5,
-                font: { color: colors.muted, size: 14, family: FONT },
-              },
-            ]
-          : [],
+      annotations: traces.length
+        ? []
+        : [
+            {
+              text: "Select at least one model.",
+              showarrow: false,
+              xref: "paper",
+              yref: "paper",
+              x: 0.5,
+              y: 0.5,
+              font: { color: colors.muted, size: 14, family: FONT },
+            },
+          ],
     };
 
     Plotly.react(els.chart, traces, layout, {
@@ -729,35 +755,42 @@
       displaylogo: false,
       responsive: true,
       scrollZoom: false,
+      doubleClick: "reset",
     }).then(function () {
       ensurePlotEvents();
       applyEmphasis();
+      syncResetButton();
     });
-
     setStatus("");
   }
 
-  function onResize() {
-    if (typeof Plotly === "undefined" || !els.chart || !els.chart.data) return;
-    Plotly.Plots.resize(els.chart);
+  function downloadPng() {
+    if (typeof Plotly === "undefined" || !els.chart.data) return;
+    Plotly.downloadImage(els.chart, {
+      format: "png",
+      filename: "cost-vs-score-" + state.boardId,
+      scale: 2,
+    });
   }
 
   async function boot() {
     initTheme();
-    showPlaceholder();
     els.allBtn.addEventListener("click", function () {
       selectAll(true);
     });
     els.noneBtn.addEventListener("click", function () {
       selectAll(false);
     });
-    els.readoutClear.addEventListener("click", function () {
-      state.pinned = null;
-      state.hoverModel = null;
-      showPlaceholder();
-      applyEmphasis();
+    Array.prototype.forEach.call(els.scaleButtons, function (button) {
+      button.addEventListener("click", function () {
+        if (state.xScale === button.dataset.scale) return;
+        state.xScale = button.dataset.scale;
+        updateScaleButtons();
+        drawChart();
+      });
     });
-    window.addEventListener("resize", onResize);
+    els.resetBtn.addEventListener("click", resetView);
+    els.downloadBtn.addEventListener("click", downloadPng);
     window.addEventListener("hashchange", function () {
       const id = hashBoardId();
       if (id && id !== state.boardId && getBoard(id)) selectBoard(id);
@@ -774,7 +807,6 @@
     }
 
     els.asOf.textContent = formatAsOf(state.payload);
-
     const ids = boardIds(state.payload);
     if (!ids.length) {
       setStatus("Snapshot has no boards.", true);
