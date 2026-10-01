@@ -46,8 +46,10 @@
     opus48: "anthropic",
     astra: "openai",
     sol6: "openai",
+    sol61: "openai",
     luna: "openai",
     sol: "openai",
+    argon: "google",
     grok47: "spacexai",
     grok46: "spacexai",
   };
@@ -58,9 +60,11 @@
     "fable",
     "opus48",
     "astra",
+    "sol61",
     "sol6",
     "luna",
     "sol",
+    "argon",
     "grok47",
     "grok46",
   ];
@@ -89,6 +93,8 @@
     "*": "star",
     h: "hexagon",
     p: "pentagon",
+    "<": "triangle-left",
+    ">": "triangle-right",
   };
 
   const els = {
