@@ -68,6 +68,8 @@
     "grok47",
     "grok46",
   ];
+  // Still listed and plottable; omitted only from the board-load / board-switch default.
+  const DEFAULT_DESELECTED = new Set(["grok46", "opus48", "sol", "sol6"]);
 
   const FALLBACK_COLORS = [
     "#4A90E2",
@@ -522,6 +524,16 @@
     applyEmphasis();
   }
 
+  function defaultSelectedIds(board) {
+    return modelEntries(board)
+      .map(function (entry) {
+        return entry.id;
+      })
+      .filter(function (id) {
+        return !DEFAULT_DESELECTED.has(id);
+      });
+  }
+
   function selectAll(on) {
     const board = getBoard(state.boardId);
     state.selected = new Set();
@@ -541,11 +553,7 @@
     state.boardId = boardId;
     state.hoverModel = null;
     state.xScale = board.x_scale === "log" ? "log" : "linear";
-    state.selected = new Set(
-      modelEntries(board).map(function (entry) {
-        return entry.id;
-      })
-    );
+    state.selected = new Set(defaultSelectedIds(board));
     setHash(boardId);
     updateChrome(board);
     updateScaleButtons();
