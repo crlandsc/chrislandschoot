@@ -1,8 +1,8 @@
 {
-  "as_of": "2026-09-29",
-  "as_of_et": "2026-09-29 ~1:28pm ET",
+  "as_of": "2026-10-01",
+  "as_of_et": "2026-10-01 ~7:50am ET",
   "timezone": "America/New_York",
-  "created_for": "Chris Landschoot live matplotlib cost-vs-score boards",
+  "created_for": "weekday board refresh 2026-10-01 \u2014 AA Intelligence Index updates for GPT-6 Luna (+0.46\u20130.87) and GPT-6 Sol (mixed \u00b10.03\u20130.42); Sonnet 5.5 max $/task +$0.018; CursorBench / Coding Agent / TB4 / SciCode unchanged vs 2026-09-29 store",
   "style": {
     "colors": {
       "fable": "#D55E00",
@@ -45,9 +45,12 @@
   "scripts": {
     "effort_curves": "/workspace/plot_model_effort_curves_2026-09-29.py",
     "tb_scicode": "/workspace/plot_tb_scicode_2026-09-29.py",
-    "coding_agent_ladders_pm": "/workspace/plot_coding_agent_ladders_2026-09-29-pm.py"
+    "coding_agent_ladders_pm": "/workspace/plot_coding_agent_ladders_2026-09-29-pm.py",
+    "plot_main": "/workspace/plot_model_effort_curves_2026-10-01.py",
+    "plot_tb_scicode": "/workspace/plot_tb_scicode_2026-10-01.py",
+    "plot_coding": "/workspace/plot_coding_agent_ladders_2026-10-01.py"
   },
-  "fetch_cache": "/workspace/aa-fetch-2026-09-29-pm",
+  "fetch_cache": "/workspace/aa-fetch-2026-10-01",
   "sonnet55_live": {
     "display_name": "Sonnet 5.5",
     "key": "sonnet55",
@@ -103,7 +106,7 @@
       ],
       [
         "max",
-        7.602633532969859,
+        7.62064302108643,
         55.9779549012591
       ]
     ],
@@ -400,7 +403,7 @@
       "y": "intelligence_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total",
+      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-01 ~7:50am ET. GPT-6 Luna and GPT-6 Sol Intelligence Index values moved vs 2026-09-29; Sonnet 5.5 max $/task +$0.018. Sonnet 5.5 low still intelligenceIndex:null on AA page (kept prior store point).",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -584,28 +587,28 @@
           "points": [
             {
               "effort": "low",
-              "cost_per_task_usd": 0.1326186130291875,
-              "intelligence_index": 33.9008505585733
+              "cost_per_task_usd": 0.1327768361714764,
+              "intelligence_index": 34.1548755585733
             },
             {
               "effort": "medium",
-              "cost_per_task_usd": 0.24721927010382636,
-              "intelligence_index": 39.7820971749522
+              "cost_per_task_usd": 0.24728577052042386,
+              "intelligence_index": 39.8118971749522
             },
             {
               "effort": "high",
-              "cost_per_task_usd": 0.3753396394543572,
-              "intelligence_index": 42.8215513642985
+              "cost_per_task_usd": 0.3728406839161857,
+              "intelligence_index": 42.4004513642985
             },
             {
               "effort": "xhigh",
-              "cost_per_task_usd": 0.523567515784736,
-              "intelligence_index": 44.1009705516407
+              "cost_per_task_usd": 0.5208098524368193,
+              "intelligence_index": 44.2448955516407
             },
             {
               "effort": "max",
-              "cost_per_task_usd": 1.049410804880785,
-              "intelligence_index": 47.5276426437724
+              "cost_per_task_usd": 1.0446616686054255,
+              "intelligence_index": 47.6305176437724
             }
           ],
           "baseline": "live_2026-09-29"
@@ -615,28 +618,28 @@
           "points": [
             {
               "effort": "low",
-              "cost_per_task_usd": 0.0045215478273067,
-              "intelligence_index": 20.9225480080866
+              "cost_per_task_usd": 0.0045151153559203,
+              "intelligence_index": 21.5261980080866
             },
             {
               "effort": "medium",
-              "cost_per_task_usd": 0.01756122553820397,
-              "intelligence_index": 29.4619523515762
+              "cost_per_task_usd": 0.017476906067835942,
+              "intelligence_index": 29.9251773515762
             },
             {
               "effort": "high",
-              "cost_per_task_usd": 0.029067566599182932,
-              "intelligence_index": 32.1482304150837
+              "cost_per_task_usd": 0.029023834521101737,
+              "intelligence_index": 32.9282054150837
             },
             {
               "effort": "xhigh",
-              "cost_per_task_usd": 0.04208218646439018,
-              "intelligence_index": 33.8845820217785
+              "cost_per_task_usd": 0.042183547923951084,
+              "intelligence_index": 34.5587320217785
             },
             {
               "effort": "max",
-              "cost_per_task_usd": 0.06792906856485216,
-              "intelligence_index": 37.2559686869738
+              "cost_per_task_usd": 0.06765421772017903,
+              "intelligence_index": 38.1245186869738
             }
           ],
           "baseline": "live_2026-09-29"
@@ -666,7 +669,7 @@
             },
             {
               "effort": "max",
-              "cost_per_task_usd": 7.602633532969859,
+              "cost_per_task_usd": 7.62064302108643,
               "intelligence_index": 55.9779549012591
             }
           ],
