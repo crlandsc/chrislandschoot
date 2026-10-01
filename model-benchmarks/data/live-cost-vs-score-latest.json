@@ -1,8 +1,8 @@
 {
   "as_of": "2026-10-01",
-  "as_of_et": "2026-10-01 ~7:50am ET",
+  "as_of_et": "2026-10-01 ~9:00am ET",
   "timezone": "America/New_York",
-  "created_for": "weekday board refresh 2026-10-01 \u2014 AA Intelligence Index updates for GPT-6 Luna (+0.46\u20130.87) and GPT-6 Sol (mixed \u00b10.03\u20130.42); Sonnet 5.5 max $/task +$0.018; CursorBench / Coding Agent / TB4 / SciCode unchanged vs 2026-09-29 store",
+  "created_for": "follow-up watch-set expansion 2026-10-01  –  ADD GPT-6.1 Sol + Gemini 4 Argon (Chris-approved). Prior models kept from 2026-10-01 ~7:50am ET store (no material drift re-check beyond new models). CursorBench: both skipped (not listed). Argon: single published (high) points on Intelligence/TB4/SciCode/Coding Agent; effort slug variants 404. Sol 6.1: full ladders on Intelligence/TB4/SciCode/Coding Agent.",
   "style": {
     "colors": {
       "fable": "#D55E00",
@@ -14,7 +14,9 @@
       "opus55": "#56B4E9",
       "sol6": "#882255",
       "luna": "#44AA99",
-      "sonnet55": "#AA3377"
+      "sonnet55": "#AA3377",
+      "sol61": "#EE3377",
+      "argon": "#F4B400"
     },
     "markers": {
       "fable": "o",
@@ -26,7 +28,9 @@
       "opus55": "v",
       "sol6": "*",
       "luna": "h",
-      "sonnet55": "p"
+      "sonnet55": "p",
+      "sol61": "<",
+      "argon": ">"
     },
     "labels": {
       "fable": "Fable 5.1",
@@ -38,7 +42,9 @@
       "opus55": "Opus 5.5",
       "sol6": "GPT-6 Sol",
       "luna": "GPT-6 Luna",
-      "sonnet55": "Sonnet 5.5"
+      "sonnet55": "Sonnet 5.5",
+      "sol61": "GPT-6.1 Sol",
+      "argon": "Gemini 4 Argon"
     },
     "style_module": "/workspace/model_plot_style.py"
   },
@@ -46,9 +52,10 @@
     "effort_curves": "/workspace/plot_model_effort_curves_2026-09-29.py",
     "tb_scicode": "/workspace/plot_tb_scicode_2026-09-29.py",
     "coding_agent_ladders_pm": "/workspace/plot_coding_agent_ladders_2026-09-29-pm.py",
-    "plot_main": "/workspace/plot_model_effort_curves_2026-10-01.py",
-    "plot_tb_scicode": "/workspace/plot_tb_scicode_2026-10-01.py",
-    "plot_coding": "/workspace/plot_coding_agent_ladders_2026-10-01.py"
+    "plot_main": "/workspace/plot_model_effort_curves_2026-10-01-sol61-argon.py",
+    "plot_tb_scicode": "/workspace/plot_tb_scicode_2026-10-01-sol61-argon.py",
+    "plot_coding": "/workspace/plot_coding_agent_ladders_2026-10-01-sol61-argon.py",
+    "plot_boards": "/workspace/plot_model_boards_2026-10-01-sol61-argon.py"
   },
   "fetch_cache": "/workspace/aa-fetch-2026-10-01",
   "sonnet55_live": {
@@ -688,6 +695,59 @@
             "xhigh": "https://artificialanalysis.ai/models/claude-sonnet-5-5-xhigh",
             "max": "https://artificialanalysis.ai/models/claude-sonnet-5-5"
           }
+        },
+        "sol61": {
+          "label": "GPT-6.1 Sol",
+          "points": [
+            {
+              "effort": "low",
+              "cost_per_task_usd": 0.13075190869859377,
+              "intelligence_index": 42.0835618555848
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 0.21370088267875537,
+              "intelligence_index": 47.7833271274065
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 0.31914442375664703,
+              "intelligence_index": 50.2377777519769
+            },
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 0.39286117158850653,
+              "intelligence_index": 51.0377679093761
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.7241670655535033,
+              "intelligence_index": 51.8332597011541
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon",
+          "aa_slugs": {
+            "low": "gpt-6-1-sol-low",
+            "medium": "gpt-6-1-sol-medium",
+            "high": "gpt-6-1-sol-high",
+            "xhigh": "gpt-6-1-sol-xhigh",
+            "max": "gpt-6-1-sol"
+          }
+        },
+        "argon": {
+          "label": "Gemini 4 Argon",
+          "points": [
+            {
+              "effort": "high",
+              "cost_per_task_usd": 1.990322379299008,
+              "intelligence_index": 52.5605655745982
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon",
+          "aa_slugs": {
+            "high": "gemini-4-argon"
+          },
+          "note": "Only gemini-4-argon published (named High); low/medium/xhigh/max slug pages 404."
         }
       }
     },
@@ -845,6 +905,54 @@
           ],
           "baseline": "live_2026-09-29_pm_reconfirmed",
           "aa_label": "Codex - GPT-6 Luna (max) ({'reasoning_effort': 'max'})"
+        },
+        "sol61": {
+          "label": "GPT-6.1 Sol",
+          "harness": "Codex",
+          "ladder": "full",
+          "points": [
+            {
+              "effort": "low",
+              "cost_per_task_usd": 0.49880364510270725,
+              "coding_agent_index": 57.21634943016617
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 0.7046746644898908,
+              "coding_agent_index": 61.41474695571183
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 0.8892413135295484,
+              "coding_agent_index": 60.14923716179784
+            },
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 1.0397081014409635,
+              "coding_agent_index": 62.90776736822983
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 1.554119528390054,
+              "coding_agent_index": 60.14750704302517
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon",
+          "aa_label": "Codex - GPT-6.1 Sol ({effort})"
+        },
+        "argon": {
+          "label": "Gemini 4 Argon",
+          "harness": "Antigravity CLI",
+          "ladder": "single_point_only",
+          "points": [
+            {
+              "effort": "high",
+              "cost_per_task_usd": 5.8439053894448145,
+              "coding_agent_index": 63.7577603035782
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon",
+          "aa_label": "Antigravity CLI - Gemini 4 Argon (high)"
         }
       },
       "ladder_status": {
@@ -867,7 +975,7 @@
       "y": "score_pct",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score\u00d7100, costPerTask; harness mini-swe-agent",
+      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1152,6 +1260,49 @@
             "xhigh": "https://artificialanalysis.ai/models/claude-sonnet-5-5-xhigh",
             "max": "https://artificialanalysis.ai/models/claude-sonnet-5-5"
           }
+        },
+        "sol61": {
+          "label": "GPT-6.1 Sol",
+          "points": [
+            {
+              "effort": "low",
+              "cost_per_task_usd": 0.3829418451399688,
+              "score_pct": 30.808080808080803
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 0.6137554705459501,
+              "score_pct": 47.979797979798
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 0.8281767981765117,
+              "score_pct": 51.5151515151515
+            },
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 1.0259491542428139,
+              "score_pct": 54.040404040404
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 1.8227634618325743,
+              "score_pct": 56.0606060606061
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon"
+        },
+        "argon": {
+          "label": "Gemini 4 Argon",
+          "points": [
+            {
+              "effort": "high",
+              "cost_per_task_usd": 6.780140181187823,
+              "score_pct": 57.07070707070711
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon",
+          "note": "Single published high point (gemini-4-argon)."
         }
       }
     },
@@ -1162,7 +1313,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score\u00d7100, costPerTask; 288 test-set subproblems",
+      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1447,6 +1598,49 @@
             "xhigh": "https://artificialanalysis.ai/models/claude-sonnet-5-5-xhigh",
             "max": "https://artificialanalysis.ai/models/claude-sonnet-5-5"
           }
+        },
+        "sol61": {
+          "label": "GPT-6.1 Sol",
+          "points": [
+            {
+              "effort": "low",
+              "cost_per_task_usd": 0.008424590277777777,
+              "score_pct": 53.2407407407407
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 0.009314833333333333,
+              "score_pct": 53.2407407407407
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 0.012967263888888888,
+              "score_pct": 55.787037037037
+            },
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 0.022047979166666665,
+              "score_pct": 55.671296296296305
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.04341916666666667,
+              "score_pct": 54.1666666666667
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon"
+        },
+        "argon": {
+          "label": "Gemini 4 Argon",
+          "points": [
+            {
+              "effort": "high",
+              "cost_per_task_usd": 0.10567819444444444,
+              "score_pct": 61.8055555555556
+            }
+          ],
+          "baseline": "live_2026-10-01_sol61_argon",
+          "note": "Single published high point (gemini-4-argon)."
         }
       }
     }
@@ -1454,28 +1648,35 @@
   "gaps": {
     "aa_coding_agent_v1_5": {
       "opus48": "No native Claude Code / Coding Agent Index row for Opus 4.8.",
-      "opus55_ladder": "Only Claude Code (max) published \u2014 no low/medium/high/xhigh Coding Agent rows.",
+      "opus55_ladder": "Only Claude Code (max) published — no low/medium/high/xhigh Coding Agent rows.",
       "fable_ladder": "Only Claude Code (max) published.",
       "astra_ladder": "Only Codex (max) published.",
       "sol6_ladder": "Only Codex (max) published.",
       "luna_ladder": "Only Codex (max) published.",
       "sol_ladder": "Only Codex (max) published.",
       "grok47_ladder": "Only Grok Build (xhigh) published; grok-4-7-low/medium/xhigh model pages 404 (high/base exist).",
-      "grok46_ladder": "Only Grok Build (xhigh) published; grok-4-6-high model page 404."
+      "grok46_ladder": "Only Grok Build (xhigh) published; grok-4-6-high model page 404.",
+      "argon_ladder": "Only Antigravity CLI (high) published — no low/medium/xhigh/max Coding Agent rows."
     },
     "cursorbench_4_0": {
       "astra": "GPT-6 Astra not listed on CursorBench 4.0",
       "sol6": "GPT-6 Sol not listed on CursorBench 4.0",
       "luna": "GPT-6 Luna not listed on CursorBench 4.0",
-      "opus48": "Opus 4.8 not listed on CursorBench 4.0"
+      "opus48": "Opus 4.8 not listed on CursorBench 4.0",
+      "sol61": "GPT-6.1 Sol not listed on CursorBench 4.0",
+      "argon": "Gemini 4 Argon not listed on CursorBench 4.0"
     },
     "notes": [
-      "2026-09-29 ~1:28pm ET Coding Agent ladder audit: AA board still has 25 variants; among watch set only Sonnet 5.5 has full Claude Code low\u2192max ladder. No new ladder points vs morning plot.",
-      "Intelligence / TB4 / SciCode already have multi-effort ladders for most of the same models \u2014 contrast is Coding-Agent-specific (not rebuilt this pass).",
+      "2026-09-29 ~1:28pm ET Coding Agent ladder audit: AA board still has 25 variants; among watch set only Sonnet 5.5 has full Claude Code low→max ladder. No new ladder points vs morning plot.",
+      "Intelligence / TB4 / SciCode already have multi-effort ladders for most of the same models — contrast is Coding-Agent-specific (not rebuilt this pass).",
       "Devin Fusion hybrid rows intentionally omitted. Mid-tier peers (Muse Spark, GLM, Kimi, Flash, DeepSeek) omitted.",
-      "ADDED Sonnet 5.5 \u2192 AA Coding Agent v1.5 native Claude Code full ladder (low\u2192max). Max 68.35783373750832 @ $14.190800796369649 (new board leader).",
-      "UPDATED GPT-6 Sol / GPT-6 Luna AA Intelligence $/task floats (scores unchanged)."
-    ]
+      "ADDED Sonnet 5.5 → AA Coding Agent v1.5 native Claude Code full ladder (low→max). Max 68.35783373750832 @ $14.190800796369649 (new board leader).",
+      "UPDATED GPT-6 Sol / GPT-6 Luna AA Intelligence $/task floats (scores unchanged).",
+      "ADDED 2026-10-01 ~9:00am ET: GPT-6.1 Sol (sol61) full AA Intelligence / TB4 / SciCode / Codex Coding Agent ladders; Gemini 4 Argon (argon) single high points on those four boards. Both omitted from CursorBench (not listed)."
+    ],
+    "aa_intelligence_v4_3_2": {
+      "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404."
+    }
   },
   "pngs": [
     "/workspace/cursorbench-live-cost-vs-score.png",
