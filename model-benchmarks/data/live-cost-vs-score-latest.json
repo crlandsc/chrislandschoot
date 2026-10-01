@@ -5,18 +5,18 @@
   "created_for": "follow-up watch-set expansion 2026-10-01  –  ADD GPT-6.1 Sol + Gemini 4 Argon (Chris-approved). Prior models kept from 2026-10-01 ~7:50am ET store (no material drift re-check beyond new models). CursorBench: both skipped (not listed). Argon: single published (high) points on Intelligence/TB4/SciCode/Coding Agent; effort slug variants 404. Sol 6.1: full ladders on Intelligence/TB4/SciCode/Coding Agent.",
   "style": {
     "colors": {
-      "fable": "#D55E00",
-      "grok46": "#009E73",
-      "grok47": "#E69F00",
-      "opus48": "#332288",
-      "sol": "#CC79A7",
-      "astra": "#0072B2",
-      "opus55": "#56B4E9",
-      "sol6": "#882255",
-      "luna": "#44AA99",
-      "sonnet55": "#AA3377",
-      "sol61": "#EE3377",
-      "argon": "#F4B400"
+      "fable": "#E1470E",
+      "grok46": "#5F39D0",
+      "grok47": "#5F39D0",
+      "opus48": "#E45825",
+      "sol": "#3177D8",
+      "astra": "#097CCE",
+      "opus55": "#E45825",
+      "sol6": "#3177D8",
+      "luna": "#869ACB",
+      "sonnet55": "#D67551",
+      "sol61": "#3177D8",
+      "argon": "#34A853"
     },
     "markers": {
       "fable": "o",
