@@ -343,18 +343,38 @@
     return "M" + rs + ",0A" + rs + "," + rs + " 0 1,1 0,-" + rs + "A" + rs + "," + rs + " 0 0,1 " + rs + ",0Z";
   }
 
+  function markerViewBox(symbol) {
+    const extent = {
+      circle: 8,
+      square: 8,
+      diamond: 10.4,
+      cross: 9.6,
+      x: 9.06,
+      "triangle-up": 9.24,
+      "triangle-down": 9.24,
+      "triangle-left": 9.24,
+      "triangle-right": 9.24,
+      pentagon: 8,
+      hexagon: 8,
+      star: 11.2,
+    };
+    const pad = (extent[symbol] || 8) + 1.4;
+    const size = pad * 2;
+    return -pad + " " + -pad + " " + size + " " + size;
+  }
+
   function buildMarkerSwatch(color, symbol) {
     const ns = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(ns, "svg");
     const path = document.createElementNS(ns, "path");
     svg.setAttribute("class", "swatch");
-    svg.setAttribute("viewBox", "-12 -12 24 24");
+    svg.setAttribute("viewBox", markerViewBox(symbol));
     svg.setAttribute("aria-hidden", "true");
     svg.setAttribute("focusable", "false");
     path.setAttribute("d", plotlySymbolPath(symbol));
     path.setAttribute("fill", color);
     path.setAttribute("stroke", color);
-    path.setAttribute("stroke-width", "1.2");
+    path.setAttribute("stroke-width", "1");
     svg.appendChild(path);
     return svg;
   }
