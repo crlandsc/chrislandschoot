@@ -1,8 +1,8 @@
 {
   "as_of": "2026-10-02",
-  "as_of_et": "2026-10-02 ~8:00am ET",
+  "as_of_et": "2026-10-02 ~5:00pm ET",
   "timezone": "America/New_York",
-  "created_for": "weekday board refresh 2026-10-02 ~8:00am ET – MATERIAL Sonnet 5.5 AA Intelligence Index (all five efforts: scores and/or $/task moved vs 2026-10-01 ~9:00am ET store). CursorBench 28/28, AA Coding Agent 19/19, Terminal-Bench 4.0 48/48, SciCode 48/48 unchanged for watch-set costed points. Fetch cache /workspace/aa-fetch-2026-10-02/.",
+  "created_for": "Grok 4.7 Low ladder add 2026-10-02 ~5:00pm ET – grok-4-7-low is live and costed on AA Intelligence / Terminal-Bench 4.0 / SciCode. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Coding Agent still Grok Build (xhigh) only. Other watch-set scores/costs left as 2026-10-02 ~8:00am ET store.",
   "style": {
     "colors": {
       "fable": "#E1470E",
@@ -410,7 +410,7 @@
       "y": "intelligence_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~8:00am ET. Sonnet 5.5 Intelligence Index + $/task moved across low→max vs 2026-10-01 store (medium +0.10 index; high $/task +$0.043; max $/task +$0.046). Other watch-set Intelligence / TB4 / SciCode / Coding Agent / CursorBench points unchanged.",
+      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -484,6 +484,11 @@
           "label": "Grok 4.7",
           "points": [
             {
+              "effort": "low",
+              "cost_per_task_usd": 1.2479664056943975,
+              "intelligence_index": 42.2166560223448
+            },
+            {
               "effort": "high",
               "cost_per_task_usd": 2.726106691786027,
               "intelligence_index": 46.3321770885625
@@ -494,7 +499,7 @@
               "intelligence_index": 46.4465506302286
             }
           ],
-          "baseline": "sep23_board"
+          "baseline": "live_2026-10-02_pm"
         },
         "sol": {
           "label": "GPT-5.6 Sol",
@@ -758,7 +763,7 @@
       "y": "coding_agent_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/agents/coding-agents",
-      "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Live-checked 2026-09-29 ~1:28pm ET. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished. No numeric change vs 2026-09-29 ~8:32am ET.",
+      "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Re-checked 2026-10-02 ~5:00pm ET: Grok 4.7 still Grok Build (xhigh) only. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished.",
       "models": {
         "sonnet55": {
           "label": "Sonnet 5.5",
@@ -975,7 +980,7 @@
       "y": "score_pct",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent",
+      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1049,6 +1054,11 @@
           "label": "Grok 4.7",
           "points": [
             {
+              "effort": "low",
+              "cost_per_task_usd": 6.331448530350984,
+              "score_pct": 16.161616161616198
+            },
+            {
               "effort": "high",
               "cost_per_task_usd": 8.946882876182261,
               "score_pct": 24.747474747474698
@@ -1059,7 +1069,7 @@
               "score_pct": 25.7575757575758
             }
           ],
-          "baseline": "sep23_board"
+          "baseline": "live_2026-10-02_pm"
         },
         "sol": {
           "label": "GPT-5.6 Sol",
@@ -1313,7 +1323,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems",
+      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1387,6 +1397,11 @@
           "label": "Grok 4.7",
           "points": [
             {
+              "effort": "low",
+              "cost_per_task_usd": 0.026778604166666668,
+              "score_pct": 54.86111111111111
+            },
+            {
               "effort": "high",
               "cost_per_task_usd": 0.09931336805555556,
               "score_pct": 57.7546296296296
@@ -1397,7 +1412,7 @@
               "score_pct": 57.4074074074074
             }
           ],
-          "baseline": "sep23_board"
+          "baseline": "live_2026-10-02_pm"
         },
         "sol": {
           "label": "GPT-5.6 Sol",
@@ -1654,7 +1669,7 @@
       "sol6_ladder": "Only Codex (max) published.",
       "luna_ladder": "Only Codex (max) published.",
       "sol_ladder": "Only Codex (max) published.",
-      "grok47_ladder": "Only Grok Build (xhigh) published; grok-4-7-low/medium/xhigh model pages 404 (high/base exist).",
+      "grok47_ladder": "Only Grok Build (xhigh) published. grok-4-7-low is live and costed on Intelligence/TB4/SciCode but has no Coding Agent row. grok-4-7-medium still 404. grok-4-7-xhigh slug 404 (xhigh is base grok-4-7).",
       "grok46_ladder": "Only Grok Build (xhigh) published; grok-4-6-high model page 404.",
       "argon_ladder": "Only Antigravity CLI (high) published — no low/medium/xhigh/max Coding Agent rows."
     },
@@ -1673,10 +1688,12 @@
       "ADDED Sonnet 5.5 → AA Coding Agent v1.5 native Claude Code full ladder (low→max). Max 68.35783373750832 @ $14.190800796369649 (new board leader).",
       "UPDATED GPT-6 Sol / GPT-6 Luna AA Intelligence $/task floats (scores unchanged).",
       "ADDED 2026-10-01 ~9:00am ET: GPT-6.1 Sol (sol61) full AA Intelligence / TB4 / SciCode / Codex Coding Agent ladders; Gemini 4 Argon (argon) single high points on those four boards. Both omitted from CursorBench (not listed).",
-      "UPDATED 2026-10-02 ~8:00am ET: Sonnet 5.5 → AA Intelligence ladder (low 35.868 @ $0.417; medium 40.839 @ $0.589; high 46.753 @ $1.122; xhigh 51.896 @ $2.746; max 56.000 @ $7.667)."
+      "UPDATED 2026-10-02 ~8:00am ET: Sonnet 5.5 → AA Intelligence ladder (low 35.868 @ $0.417; medium 40.839 @ $0.589; high 46.753 @ $1.122; xhigh 51.896 @ $2.746; max 56.000 @ $7.667).",
+      "ADDED 2026-10-02 ~5:00pm ET: Grok 4.7 Low (grok-4-7-low) on AA Intelligence (42.217 @ $1.248), Terminal-Bench 4.0 (16.162% @ $6.331), SciCode (54.861% @ $0.027). Medium still 404. Coding Agent still Grok Build xhigh only."
     ],
     "aa_intelligence_v4_3_2": {
-      "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404."
+      "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404.",
+      "grok47_medium": "grok-4-7-medium still 404; Intelligence / TB4 / SciCode now have low + high + xhigh (base slug is xhigh)."
     }
   },
   "pngs": [
