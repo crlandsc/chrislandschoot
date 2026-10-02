@@ -410,7 +410,7 @@
       "y": "intelligence_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~8:00am ET. Sonnet 5.5 Intelligence Index + $/task moved across low\u2192max vs 2026-10-01 store (medium +0.10 index; high $/task +$0.043; max $/task +$0.046). Other watch-set Intelligence / TB4 / SciCode / Coding Agent / CursorBench points unchanged.",
+      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~8:00am ET. Sonnet 5.5 Intelligence Index + $/task moved across low→max vs 2026-10-01 store (medium +0.10 index; high $/task +$0.043; max $/task +$0.046). Other watch-set Intelligence / TB4 / SciCode / Coding Agent / CursorBench points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -975,7 +975,7 @@
       "y": "score_pct",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score\u00d7100, costPerTask; harness mini-swe-agent",
+      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1313,7 +1313,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score\u00d7100, costPerTask; 288 test-set subproblems",
+      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1648,7 +1648,7 @@
   "gaps": {
     "aa_coding_agent_v1_5": {
       "opus48": "No native Claude Code / Coding Agent Index row for Opus 4.8.",
-      "opus55_ladder": "Only Claude Code (max) published \u2014 no low/medium/high/xhigh Coding Agent rows.",
+      "opus55_ladder": "Only Claude Code (max) published — no low/medium/high/xhigh Coding Agent rows.",
       "fable_ladder": "Only Claude Code (max) published.",
       "astra_ladder": "Only Codex (max) published.",
       "sol6_ladder": "Only Codex (max) published.",
@@ -1656,7 +1656,7 @@
       "sol_ladder": "Only Codex (max) published.",
       "grok47_ladder": "Only Grok Build (xhigh) published; grok-4-7-low/medium/xhigh model pages 404 (high/base exist).",
       "grok46_ladder": "Only Grok Build (xhigh) published; grok-4-6-high model page 404.",
-      "argon_ladder": "Only Antigravity CLI (high) published \u2014 no low/medium/xhigh/max Coding Agent rows."
+      "argon_ladder": "Only Antigravity CLI (high) published — no low/medium/xhigh/max Coding Agent rows."
     },
     "cursorbench_4_0": {
       "astra": "GPT-6 Astra not listed on CursorBench 4.0",
@@ -1667,13 +1667,13 @@
       "argon": "Gemini 4 Argon not listed on CursorBench 4.0"
     },
     "notes": [
-      "2026-09-29 ~1:28pm ET Coding Agent ladder audit: AA board still has 25 variants; among watch set only Sonnet 5.5 has full Claude Code low\u2192max ladder. No new ladder points vs morning plot.",
-      "Intelligence / TB4 / SciCode already have multi-effort ladders for most of the same models \u2014 contrast is Coding-Agent-specific (not rebuilt this pass).",
+      "2026-09-29 ~1:28pm ET Coding Agent ladder audit: AA board still has 25 variants; among watch set only Sonnet 5.5 has full Claude Code low→max ladder. No new ladder points vs morning plot.",
+      "Intelligence / TB4 / SciCode already have multi-effort ladders for most of the same models — contrast is Coding-Agent-specific (not rebuilt this pass).",
       "Devin Fusion hybrid rows intentionally omitted. Mid-tier peers (Muse Spark, GLM, Kimi, Flash, DeepSeek) omitted.",
-      "ADDED Sonnet 5.5 \u2192 AA Coding Agent v1.5 native Claude Code full ladder (low\u2192max). Max 68.35783373750832 @ $14.190800796369649 (new board leader).",
+      "ADDED Sonnet 5.5 → AA Coding Agent v1.5 native Claude Code full ladder (low→max). Max 68.35783373750832 @ $14.190800796369649 (new board leader).",
       "UPDATED GPT-6 Sol / GPT-6 Luna AA Intelligence $/task floats (scores unchanged).",
       "ADDED 2026-10-01 ~9:00am ET: GPT-6.1 Sol (sol61) full AA Intelligence / TB4 / SciCode / Codex Coding Agent ladders; Gemini 4 Argon (argon) single high points on those four boards. Both omitted from CursorBench (not listed).",
-      "UPDATED 2026-10-02 ~8:00am ET: Sonnet 5.5 \u2192 AA Intelligence ladder (low 35.868 @ $0.417; medium 40.839 @ $0.589; high 46.753 @ $1.122; xhigh 51.896 @ $2.746; max 56.000 @ $7.667)."
+      "UPDATED 2026-10-02 ~8:00am ET: Sonnet 5.5 → AA Intelligence ladder (low 35.868 @ $0.417; medium 40.839 @ $0.589; high 46.753 @ $1.122; xhigh 51.896 @ $2.746; max 56.000 @ $7.667)."
     ],
     "aa_intelligence_v4_3_2": {
       "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404."
