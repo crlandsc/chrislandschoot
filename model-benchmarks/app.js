@@ -255,6 +255,110 @@
     return MATPLOTLIB_TO_PLOTLY[styleMaps().markers[id]] || "circle";
   }
 
+  // Plotly 2.35 symbol_defs paths at r=8, origin at center. Legend SVGs use these so
+  // chips match scatter markers from markerFor() rather than drifting into CSS dots.
+  function plotlySymbolPath(symbol) {
+    const r = 8;
+    const round = function (n) {
+      return Math.round(n * 100) / 100;
+    };
+    const sqrt2 = Math.SQRT2;
+    const sqrt3 = Math.sqrt(3);
+    const rs = round(r);
+    if (symbol === "square") {
+      return "M" + rs + "," + rs + "H-" + rs + "V-" + rs + "H" + rs + "Z";
+    }
+    if (symbol === "diamond") {
+      const rd = round(r * 1.3);
+      return "M" + rd + ",0L0," + rd + "L-" + rd + ",0L0,-" + rd + "Z";
+    }
+    if (symbol === "cross") {
+      const rc = round(r * 0.4);
+      const rc2 = round(r * 1.2);
+      return (
+        "M" + rc2 + "," + rc + "H" + rc + "V" + rc2 + "H-" + rc +
+        "V" + rc + "H-" + rc2 + "V-" + rc + "H-" + rc + "V-" + rc2 +
+        "H" + rc + "V-" + rc + "H" + rc2 + "Z"
+      );
+    }
+    if (symbol === "x") {
+      const rx = round((r * 0.8) / sqrt2);
+      const ne = "l" + rx + "," + rx;
+      const se = "l" + rx + ",-" + rx;
+      const sw = "l-" + rx + ",-" + rx;
+      const nw = "l-" + rx + "," + rx;
+      return "M0," + rx + ne + se + sw + se + sw + nw + sw + nw + ne + nw + ne + "Z";
+    }
+    if (symbol === "triangle-up") {
+      const rt = round((r * 2) / sqrt3);
+      const r2 = round(r / 2);
+      return "M-" + rt + "," + r2 + "H" + rt + "L0,-" + rs + "Z";
+    }
+    if (symbol === "triangle-down") {
+      const rt = round((r * 2) / sqrt3);
+      const r2 = round(r / 2);
+      return "M-" + rt + ",-" + r2 + "H" + rt + "L0," + rs + "Z";
+    }
+    if (symbol === "triangle-left") {
+      const rt = round((r * 2) / sqrt3);
+      const r2 = round(r / 2);
+      return "M" + r2 + ",-" + rt + "V" + rt + "L-" + rs + ",0Z";
+    }
+    if (symbol === "triangle-right") {
+      const rt = round((r * 2) / sqrt3);
+      const r2 = round(r / 2);
+      return "M-" + r2 + ",-" + rt + "V" + rt + "L" + rs + ",0Z";
+    }
+    if (symbol === "pentagon") {
+      const x1 = round(r * 0.951);
+      const x2 = round(r * 0.588);
+      const y0 = round(-r);
+      const y1 = round(r * -0.309);
+      const y2 = round(r * 0.809);
+      return "M" + x1 + "," + y1 + "L" + x2 + "," + y2 + "H-" + x2 + "L-" + x1 + "," + y1 + "L0," + y0 + "Z";
+    }
+    if (symbol === "hexagon") {
+      const y1 = round(r / 2);
+      const x = round((r * sqrt3) / 2);
+      return "M" + x + ",-" + y1 + "V" + y1 + "L0," + rs + "L-" + x + "," + y1 + "V-" + y1 + "L0,-" + rs + "Z";
+    }
+    if (symbol === "star") {
+      const starR = r * 1.4;
+      const x1 = round(starR * 0.225);
+      const x2 = round(starR * 0.951);
+      const x3 = round(starR * 0.363);
+      const x4 = round(starR * 0.588);
+      const y0 = round(-starR);
+      const y1 = round(starR * -0.309);
+      const y3 = round(starR * 0.118);
+      const y4 = round(starR * 0.809);
+      const y5 = round(starR * 0.382);
+      return (
+        "M" + x1 + "," + y1 + "H" + x2 + "L" + x3 + "," + y3 +
+        "L" + x4 + "," + y4 + "L0," + y5 + "L-" + x4 + "," + y4 +
+        "L-" + x3 + "," + y3 + "L-" + x2 + "," + y1 + "H-" + x1 +
+        "L0," + y0 + "Z"
+      );
+    }
+    return "M" + rs + ",0A" + rs + "," + rs + " 0 1,1 0,-" + rs + "A" + rs + "," + rs + " 0 0,1 " + rs + ",0Z";
+  }
+
+  function buildMarkerSwatch(color, symbol) {
+    const ns = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(ns, "svg");
+    const path = document.createElementNS(ns, "path");
+    svg.setAttribute("class", "swatch");
+    svg.setAttribute("viewBox", "-12 -12 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    path.setAttribute("d", plotlySymbolPath(symbol));
+    path.setAttribute("fill", color);
+    path.setAttribute("stroke", color);
+    path.setAttribute("stroke-width", "1.2");
+    svg.appendChild(path);
+    return svg;
+  }
+
   function labelFor(id, series) {
     return (series && series.label) || styleMaps().labels[id] || id;
   }
@@ -443,14 +547,12 @@
 
   function buildChip(entry, hasPoints) {
     const button = document.createElement("button");
-    const swatch = document.createElement("span");
+    const swatch = buildMarkerSwatch(entry.color, markerFor(entry.id));
     const text = document.createElement("span");
     button.type = "button";
     button.className = "model-chip";
     button.dataset.modelId = entry.id;
     button.setAttribute("aria-pressed", state.selected.has(entry.id) ? "true" : "false");
-    swatch.className = "swatch";
-    swatch.style.background = entry.color;
     text.textContent = entry.label;
     button.append(swatch, text);
     if (!hasPoints) {
