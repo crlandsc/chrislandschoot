@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-10-02",
-  "as_of_et": "2026-10-02 ~5:00pm ET",
+  "as_of": "2026-10-06",
+  "as_of_et": "2026-10-06 ~8:00am ET",
   "timezone": "America/New_York",
   "created_for": "Grok 4.7 Low ladder add 2026-10-02 ~5:00pm ET – grok-4-7-low is live and costed on AA Intelligence / Terminal-Bench 4.0 / SciCode. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Coding Agent still Grok Build (xhigh) only. Other watch-set scores/costs left as 2026-10-02 ~8:00am ET store.",
   "style": {
@@ -57,7 +57,7 @@
     "plot_coding": "/workspace/plot_coding_agent_ladders_2026-10-01-sol61-argon.py",
     "plot_boards": "/workspace/plot_model_boards_2026-10-02.py"
   },
-  "fetch_cache": "/workspace/aa-fetch-2026-10-02",
+  "fetch_cache": "/workspace/aa-fetch-2026-10-06",
   "sonnet55_live": {
     "display_name": "Sonnet 5.5",
     "key": "sonnet55",
@@ -410,7 +410,7 @@
       "y": "intelligence_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store.",
+      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -459,22 +459,22 @@
           "points": [
             {
               "effort": "low",
-              "cost_per_task_usd": 0.47528534374531,
+              "cost_per_task_usd": 0.37578773607022314,
               "intelligence_index": 35.1246953482174
             },
             {
               "effort": "medium",
-              "cost_per_task_usd": 1.4963233956114492,
+              "cost_per_task_usd": 1.14381661681713,
               "intelligence_index": 42.836322654063
             },
             {
               "effort": "high",
-              "cost_per_task_usd": 1.8589423352127492,
+              "cost_per_task_usd": 1.4848449196688633,
               "intelligence_index": 44.3113073012592
             },
             {
               "effort": "xhigh",
-              "cost_per_task_usd": 2.323692124283027,
+              "cost_per_task_usd": 1.7523145158282367,
               "intelligence_index": 44.199810436996
             }
           ],
@@ -980,7 +980,7 @@
       "y": "score_pct",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low.",
+      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1029,22 +1029,22 @@
           "points": [
             {
               "effort": "low",
-              "cost_per_task_usd": 2.449546902109067,
+              "cost_per_task_usd": 1.810486192313955,
               "score_pct": 3.03030303030303
             },
             {
               "effort": "medium",
-              "cost_per_task_usd": 6.70162567274232,
+              "cost_per_task_usd": 4.930218118430546,
               "score_pct": 13.1313131313131
             },
             {
               "effort": "high",
-              "cost_per_task_usd": 7.5094486103050775,
+              "cost_per_task_usd": 5.877412948691136,
               "score_pct": 21.2121212121212
             },
             {
               "effort": "xhigh",
-              "cost_per_task_usd": 8.983965299295482,
+              "cost_per_task_usd": 6.595499239020591,
               "score_pct": 17.171717171717198
             }
           ],
