@@ -121,7 +121,9 @@
   const state = {
     payload: null,
     boardId: null,
+    // Shared across boards, keyed by model id. Defaults apply once per id until toggled.
     selected: new Set(),
+    visibilityKnown: new Set(),
     xScale: "linear",
     hoverModel: null,
     fadeTimer: 0,
@@ -482,8 +484,13 @@
   }
 
   function updateCount() {
-    const total = modelEntries(getBoard(state.boardId)).length;
-    const selected = state.selected.size;
+    const ids = modelEntries(getBoard(state.boardId)).map(function (entry) {
+      return entry.id;
+    });
+    const total = ids.length;
+    const selected = ids.filter(function (id) {
+      return state.selected.has(id);
+    }).length;
     els.modelCount.textContent = selected === total ? String(total) : selected + " of " + total;
   }
 
@@ -558,6 +565,7 @@
 
   function toggleModels(ids, on) {
     ids.forEach(function (id) {
+      state.visibilityKnown.add(id);
       if (on) state.selected.add(id);
       else state.selected.delete(id);
     });
@@ -646,24 +654,23 @@
     applyEmphasis();
   }
 
-  function defaultSelectedIds(board) {
-    return modelEntries(board)
-      .map(function (entry) {
-        return entry.id;
-      })
-      .filter(function (id) {
-        return !DEFAULT_DESELECTED.has(id);
-      });
+  function applyDefaultVisibility(board) {
+    modelEntries(board).forEach(function (entry) {
+      if (state.visibilityKnown.has(entry.id)) return;
+      state.visibilityKnown.add(entry.id);
+      if (!DEFAULT_DESELECTED.has(entry.id)) {
+        state.selected.add(entry.id);
+      }
+    });
   }
 
   function selectAll(on) {
     const board = getBoard(state.boardId);
-    state.selected = new Set();
-    if (on) {
-      modelEntries(board).forEach(function (entry) {
-        state.selected.add(entry.id);
-      });
-    }
+    modelEntries(board).forEach(function (entry) {
+      state.visibilityKnown.add(entry.id);
+      if (on) state.selected.add(entry.id);
+      else state.selected.delete(entry.id);
+    });
     renderModels();
     drawChart();
   }
@@ -675,7 +682,7 @@
     state.boardId = boardId;
     state.hoverModel = null;
     state.xScale = board.x_scale === "log" ? "log" : "linear";
-    state.selected = new Set(defaultSelectedIds(board));
+    applyDefaultVisibility(board);
     setHash(boardId);
     updateChrome(board);
     updateScaleButtons();
