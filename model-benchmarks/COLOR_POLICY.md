@@ -8,7 +8,7 @@ Live source of truth for plotted models: `data/live-cost-vs-score-latest.json` â
 
 | Lab | Line | Hex | Model IDs |
 |-----|------|-----|-----------|
-| Anthropic | Haiku | `#D0A595` | haiku55 |
+| Anthropic | Haiku | `#DE9A72` | haiku55 |
 | Anthropic | Sonnet | `#D67551` | sonnet55 |
 | Anthropic | Opus | `#E45825` | opus48, opus55 |
 | Anthropic | Fable | `#E1470E` | fable |
