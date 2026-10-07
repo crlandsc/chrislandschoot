@@ -8,6 +8,7 @@ Live source of truth for plotted models: `data/live-cost-vs-score-latest.json` �
 
 | Lab | Line | Hex | Model IDs |
 |-----|------|-----|-----------|
+| Anthropic | Haiku | `#DE9A72` | haiku55 |
 | Anthropic | Sonnet | `#D67551` | sonnet55 |
 | Anthropic | Opus | `#E45825` | opus48, opus55 |
 | Anthropic | Fable | `#E1470E` | fable |
@@ -23,7 +24,7 @@ Faint to vibrant by size within a lab: Anthropic Haiku → Sonnet → Opus → F
 
 Default off on board load and board switch: `grok46`, `opus48`, `sol`, `sol6`.
 
-Everything else stays selected, including opus55, sonnet55, fable, sol61, grok47, argon, astra, luna. The All button still selects every model. Models stay in the snapshot and chip list when off.
+Everything else stays selected, including haiku55, opus55, sonnet55, fable, sol61, grok47, argon, astra, luna. The All button still selects every model. Models stay in the snapshot and chip list when off.
 
 ## Placeholders (not plotted yet)
 
@@ -31,7 +32,6 @@ Reserved for future Benchy work. Same lab hue family; do not reuse a plotted lin
 
 | Lab | Line | Hex |
 |-----|------|-----|
-| Anthropic | Haiku | `#D0A595` |
 | Anthropic | Mythos | `#E1470E` (same as Fable; same model, not public) |
 | OpenAI | Terra | `#5C85CC` |
 | Google | Flash | `#7CC08E` |
