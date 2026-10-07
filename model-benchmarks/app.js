@@ -40,6 +40,7 @@
   ];
   const OTHER_PROVIDER = { id: "other", label: "Other" };
   const MODEL_PROVIDERS = {
+    haiku55: "anthropic",
     sonnet55: "anthropic",
     opus55: "anthropic",
     fable: "anthropic",
@@ -55,6 +56,7 @@
   };
   // Newest first within each provider. Models missing from this list sort to the front of their group.
   const MODEL_RECENCY = [
+    "haiku55",
     "sonnet55",
     "opus55",
     "fable",
@@ -97,6 +99,7 @@
     p: "pentagon",
     "<": "triangle-left",
     ">": "triangle-right",
+    d: "diamond-tall",
   };
 
   const els = {
@@ -274,6 +277,11 @@
       const rd = round(r * 1.3);
       return "M" + rd + ",0L0," + rd + "L-" + rd + ",0L0,-" + rd + "Z";
     }
+    if (symbol === "diamond-tall") {
+      const dx = round(r * 0.7);
+      const dy = round(r * 1.4);
+      return "M0," + dy + "L" + dx + ",0L0,-" + dy + "L-" + dx + ",0Z";
+    }
     if (symbol === "cross") {
       const rc = round(r * 0.4);
       const rc2 = round(r * 1.2);
@@ -350,6 +358,7 @@
       circle: 8,
       square: 8,
       diamond: 10.4,
+      "diamond-tall": 11.2,
       cross: 9.6,
       x: 9.06,
       "triangle-up": 9.24,

@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-10-06",
-  "as_of_et": "2026-10-06 ~8:00am ET",
+  "as_of": "2026-10-07",
+  "as_of_et": "2026-10-07 ~3:30pm ET",
   "timezone": "America/New_York",
   "created_for": "Grok 4.7 Low ladder add 2026-10-02 ~5:00pm ET – grok-4-7-low is live and costed on AA Intelligence / Terminal-Bench 4.0 / SciCode. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Coding Agent still Grok Build (xhigh) only. Other watch-set scores/costs left as 2026-10-02 ~8:00am ET store.",
   "style": {
@@ -16,7 +16,8 @@
       "luna": "#869ACB",
       "sonnet55": "#D67551",
       "sol61": "#3177D8",
-      "argon": "#34A853"
+      "argon": "#34A853",
+      "haiku55": "#D0A595"
     },
     "markers": {
       "fable": "o",
@@ -30,7 +31,8 @@
       "luna": "h",
       "sonnet55": "p",
       "sol61": "<",
-      "argon": ">"
+      "argon": ">",
+      "haiku55": "d"
     },
     "labels": {
       "fable": "Fable 5.1",
@@ -44,7 +46,8 @@
       "luna": "GPT-6 Luna",
       "sonnet55": "Sonnet 5.5",
       "sol61": "GPT-6.1 Sol",
-      "argon": "Gemini 4 Argon"
+      "argon": "Gemini 4 Argon",
+      "haiku55": "Haiku 5.5"
     },
     "style_module": "/workspace/model_plot_style.py"
   },
@@ -57,7 +60,7 @@
     "plot_coding": "/workspace/plot_coding_agent_ladders_2026-10-01-sol61-argon.py",
     "plot_boards": "/workspace/plot_model_boards_2026-10-02.py"
   },
-  "fetch_cache": "/workspace/aa-fetch-2026-10-06",
+  "fetch_cache": "/workspace/aa-fetch-2026-10-07-pm",
   "sonnet55_live": {
     "display_name": "Sonnet 5.5",
     "key": "sonnet55",
@@ -223,7 +226,7 @@
       "y": "score_pct",
       "x_scale": "linear",
       "source": "https://cursor.com/cursorbench",
-      "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5",
+      "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 low/medium/high/extra/max (OG asset cb-10-07-haiku-5-5-v2); other points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -400,6 +403,37 @@
             }
           ],
           "baseline": "live_2026-09-28"
+        },
+        "haiku55": {
+          "label": "Haiku 5.5",
+          "points": [
+            {
+              "effort": "low",
+              "cost_per_task_usd": 0.08,
+              "score_pct": 30.9
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 0.17,
+              "score_pct": 36.9
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 0.32,
+              "score_pct": 42.3
+            },
+            {
+              "effort": "extra",
+              "cost_per_task_usd": 0.56,
+              "score_pct": 44.3
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 1.12,
+              "score_pct": 48.4
+            }
+          ],
+          "baseline": "live_2026-10-07_pm"
         }
       }
     },
@@ -410,7 +444,7 @@
       "y": "intelligence_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged.",
+      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -753,6 +787,30 @@
             "high": "gemini-4-argon"
           },
           "note": "Only gemini-4-argon published (named High); low/medium/xhigh/max slug pages 404."
+        },
+        "haiku55": {
+          "label": "Haiku 5.5",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 0.12378561092096102,
+              "intelligence_index": 41.2489304677024
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.21276971216992022,
+              "intelligence_index": 43.3950199670746
+            }
+          ],
+          "baseline": "live_2026-10-07_pm",
+          "aa_slugs": {
+            "xhigh": "claude-haiku-5-5-xhigh",
+            "max": "claude-haiku-5-5"
+          },
+          "aa_urls": {
+            "xhigh": "https://artificialanalysis.ai/models/claude-haiku-5-5-xhigh",
+            "max": "https://artificialanalysis.ai/models/claude-haiku-5-5"
+          }
         }
       }
     },
@@ -763,7 +821,7 @@
       "y": "coding_agent_index",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/agents/coding-agents",
-      "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Re-checked 2026-10-02 ~5:00pm ET: Grok 4.7 still Grok Build (xhigh) only. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished.",
+      "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Re-checked 2026-10-02 ~5:00pm ET: Grok 4.7 still Grok Build (xhigh) only. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished. Re-checked 2026-10-07 ~3:30pm ET: no Haiku 5.5 row yet (31 rows, unchanged).",
       "models": {
         "sonnet55": {
           "label": "Sonnet 5.5",
@@ -970,7 +1028,8 @@
         "sol": "single_point_only",
         "grok47": "single_point_only",
         "grok46": "single_point_only",
-        "opus48": "unpublished"
+        "opus48": "unpublished",
+        "haiku55": "unpublished"
       }
     },
     "terminal_bench_4_0": {
@@ -980,7 +1039,7 @@
       "y": "score_pct",
       "x_scale": "linear",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged.",
+      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1313,6 +1372,30 @@
           ],
           "baseline": "live_2026-10-01_sol61_argon",
           "note": "Single published high point (gemini-4-argon)."
+        },
+        "haiku55": {
+          "label": "Haiku 5.5",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 0.46029073807682436,
+              "score_pct": 29.292929292929298
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.6518847460144606,
+              "score_pct": 32.8282828282828
+            }
+          ],
+          "baseline": "live_2026-10-07_pm",
+          "aa_slugs": {
+            "xhigh": "claude-haiku-5-5-xhigh",
+            "max": "claude-haiku-5-5"
+          },
+          "aa_urls": {
+            "xhigh": "https://artificialanalysis.ai/models/claude-haiku-5-5-xhigh",
+            "max": "https://artificialanalysis.ai/models/claude-haiku-5-5"
+          }
         }
       }
     },
@@ -1323,7 +1406,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low.",
+      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1656,6 +1739,30 @@
           ],
           "baseline": "live_2026-10-01_sol61_argon",
           "note": "Single published high point (gemini-4-argon)."
+        },
+        "haiku55": {
+          "label": "Haiku 5.5",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 0.0026774409722222225,
+              "score_pct": 51.73611111111111
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.010939723611111112,
+              "score_pct": 54.976851851851805
+            }
+          ],
+          "baseline": "live_2026-10-07_pm",
+          "aa_slugs": {
+            "xhigh": "claude-haiku-5-5-xhigh",
+            "max": "claude-haiku-5-5"
+          },
+          "aa_urls": {
+            "xhigh": "https://artificialanalysis.ai/models/claude-haiku-5-5-xhigh",
+            "max": "https://artificialanalysis.ai/models/claude-haiku-5-5"
+          }
         }
       }
     }
@@ -1671,7 +1778,8 @@
       "sol_ladder": "Only Codex (max) published.",
       "grok47_ladder": "Only Grok Build (xhigh) published. grok-4-7-low is live and costed on Intelligence/TB4/SciCode but has no Coding Agent row. grok-4-7-medium still 404. grok-4-7-xhigh slug 404 (xhigh is base grok-4-7).",
       "grok46_ladder": "Only Grok Build (xhigh) published; grok-4-6-high model page 404.",
-      "argon_ladder": "Only Antigravity CLI (high) published — no low/medium/xhigh/max Coding Agent rows."
+      "argon_ladder": "Only Antigravity CLI (high) published — no low/medium/xhigh/max Coding Agent rows.",
+      "haiku55": "No Claude Code / Coding Agent Index row for Haiku 5.5 yet."
     },
     "cursorbench_4_0": {
       "astra": "GPT-6 Astra not listed on CursorBench 4.0",
@@ -1689,7 +1797,8 @@
       "UPDATED GPT-6 Sol / GPT-6 Luna AA Intelligence $/task floats (scores unchanged).",
       "ADDED 2026-10-01 ~9:00am ET: GPT-6.1 Sol (sol61) full AA Intelligence / TB4 / SciCode / Codex Coding Agent ladders; Gemini 4 Argon (argon) single high points on those four boards. Both omitted from CursorBench (not listed).",
       "UPDATED 2026-10-02 ~8:00am ET: Sonnet 5.5 → AA Intelligence ladder (low 35.868 @ $0.417; medium 40.839 @ $0.589; high 46.753 @ $1.122; xhigh 51.896 @ $2.746; max 56.000 @ $7.667).",
-      "ADDED 2026-10-02 ~5:00pm ET: Grok 4.7 Low (grok-4-7-low) on AA Intelligence (42.217 @ $1.248), Terminal-Bench 4.0 (16.162% @ $6.331), SciCode (54.861% @ $0.027). Medium still 404. Coding Agent still Grok Build xhigh only."
+      "ADDED 2026-10-02 ~5:00pm ET: Grok 4.7 Low (grok-4-7-low) on AA Intelligence (42.217 @ $1.248), Terminal-Bench 4.0 (16.162% @ $6.331), SciCode (54.861% @ $0.027). Medium still 404. Coding Agent still Grok Build xhigh only.",
+      "ADDED 2026-10-07 ~3:30pm ET: Haiku 5.5 (claude-haiku-5-5*). AA Intelligence / TB4 / SciCode: only xhigh and max are costed (low/medium/high scored, uncosted, AA labels all variants \"Default Fallback\"). CursorBench 4.0: full low→max ladder. Coding Agent: not listed."
     ],
     "aa_intelligence_v4_3_2": {
       "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404.",
