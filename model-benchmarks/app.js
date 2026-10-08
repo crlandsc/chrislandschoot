@@ -71,7 +71,7 @@
     "grok46",
   ];
   // Still listed and plottable; omitted only from the board-load / board-switch default.
-  const DEFAULT_DESELECTED = new Set(["grok46", "opus48", "sol", "sol6"]);
+  const DEFAULT_DESELECTED = new Set(["grok46", "opus48", "sol", "sol6", "fable"]);
 
   const FALLBACK_COLORS = [
     "#4A90E2",
@@ -127,7 +127,10 @@
     // Shared across boards, keyed by model id. Defaults apply once per id until toggled.
     selected: new Set(),
     visibilityKnown: new Set(),
-    xScale: "linear",
+    xScale: "log",
+    // Per-board Linear/Log and zoom, in memory only. Reload clears this.
+    boardViews: {},
+    plotBoardId: null,
     hoverModel: null,
     fadeTimer: 0,
     plotEventsBound: false,
@@ -684,13 +687,38 @@
     drawChart();
   }
 
+  function sliceRange(range) {
+    if (!range || range.length < 2) return null;
+    return [range[0], range[1]];
+  }
+
+  function ensureBoardView(boardId) {
+    if (!state.boardViews[boardId]) {
+      state.boardViews[boardId] = { xScale: "log", xRange: null, yRange: null };
+    }
+    return state.boardViews[boardId];
+  }
+
+  function captureViewFromLayout(boardId) {
+    if (!boardId) return;
+    const layout = els.chart && els.chart._fullLayout;
+    const view = ensureBoardView(boardId);
+    view.xScale = state.xScale;
+    if (!layout || !layout.xaxis || !layout.yaxis) return;
+    view.xRange = layout.xaxis.autorange ? null : sliceRange(layout.xaxis.range);
+    view.yRange = layout.yaxis.autorange ? null : sliceRange(layout.yaxis.range);
+  }
+
   function selectBoard(boardId, immediate) {
     const board = getBoard(boardId);
     if (!board || boardId === state.boardId) return;
     const firstPaint = !state.boardId;
+    if (state.boardId) captureViewFromLayout(state.boardId);
     state.boardId = boardId;
     state.hoverModel = null;
-    state.xScale = board.x_scale === "log" ? "log" : "linear";
+    // Log is the app default. Ignore snapshot x_scale so a data refresh cannot undo it.
+    const view = state.boardViews[boardId];
+    state.xScale = view && view.xScale ? view.xScale : "log";
     applyDefaultVisibility(board);
     setHash(boardId);
     updateChrome(board);
@@ -757,6 +785,11 @@
 
   function resetView() {
     if (typeof Plotly === "undefined" || !els.chart.data) return;
+    if (state.boardId) {
+      const view = ensureBoardView(state.boardId);
+      view.xRange = null;
+      view.yRange = null;
+    }
     Plotly.relayout(els.chart, { "xaxis.autorange": true, "yaxis.autorange": true });
   }
 
@@ -872,7 +905,12 @@
       state.tooltipModel = null;
       setHoverModel(null);
     });
-    els.chart.on("plotly_relayout", syncResetButton);
+    els.chart.on("plotly_relayout", function () {
+      syncResetButton();
+      if (state.plotBoardId === state.boardId) {
+        captureViewFromLayout(state.boardId);
+      }
+    });
     els.chart.on("plotly_afterplot", function () {
       watchHoverLayer();
       applyEmphasis();
@@ -1022,6 +1060,18 @@
           ],
     };
 
+    const view = state.boardViews[state.boardId];
+    if (view && view.xScale === xScale) {
+      if (view.xRange) {
+        layout.xaxis.range = view.xRange;
+        layout.xaxis.autorange = false;
+      }
+      if (view.yRange) {
+        layout.yaxis.range = view.yRange;
+        layout.yaxis.autorange = false;
+      }
+    }
+
     Plotly.react(els.chart, traces, layout, {
       displayModeBar: false,
       displaylogo: false,
@@ -1029,6 +1079,7 @@
       scrollZoom: false,
       doubleClick: "reset",
     }).then(function () {
+      state.plotBoardId = state.boardId;
       ensurePlotEvents();
       applyEmphasis();
       syncResetButton();
@@ -1057,6 +1108,10 @@
       button.addEventListener("click", function () {
         if (state.xScale === button.dataset.scale) return;
         state.xScale = button.dataset.scale;
+        const view = ensureBoardView(state.boardId);
+        view.xScale = state.xScale;
+        view.xRange = null;
+        view.yRange = null;
         updateScaleButtons();
         drawChart();
       });

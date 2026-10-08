@@ -224,7 +224,7 @@
       "png": "/workspace/cursorbench-live-cost-vs-score.png",
       "x": "cost_per_task_usd",
       "y": "score_pct",
-      "x_scale": "linear",
+      "x_scale": "log",
       "source": "https://cursor.com/cursorbench",
       "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 low/medium/high/extra/max (OG asset cb-10-07-haiku-5-5-v2); other points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 26–28% (OG asset cb-10-07-sonnet-5-5-cache-read); scores and tokens unchanged; other points unchanged.",
       "models": {
@@ -442,7 +442,7 @@
       "png": "/workspace/aa-intelligence-live-cost-vs-index.png",
       "x": "cost_per_task_usd",
       "y": "intelligence_index",
-      "x_scale": "linear",
+      "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
       "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 17–29% (AA recomputed cost); scores unchanged. ADDED Haiku 5.5 low / medium / high (now costed on AA).",
       "models": {
@@ -840,7 +840,7 @@
       "png": "/workspace/aa-coding-agent-live-cost-vs-index.png",
       "x": "cost_per_task_usd",
       "y": "coding_agent_index",
-      "x_scale": "linear",
+      "x_scale": "log",
       "source": "https://artificialanalysis.ai/agents/coding-agents",
       "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Re-checked 2026-10-02 ~5:00pm ET: Grok 4.7 still Grok Build (xhigh) only. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished. Re-checked 2026-10-07 ~3:30pm ET: no Haiku 5.5 row yet (31 rows, unchanged). Re-checked 2026-10-08 ~8:00am ET: ADDED Haiku 5.5 full Claude Code ladder (low–max); 37 rows. Sonnet 5.5 Coding Agent points unchanged.",
       "models": {
@@ -1092,7 +1092,7 @@
       "png": "/workspace/terminal-bench-live-cost-vs-score.png",
       "x": "cost_per_task_usd",
       "y": "score_pct",
-      "x_scale": "linear",
+      "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
       "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 29–33% (AA recomputed cost); scores unchanged. ADDED Haiku 5.5 low / medium / high (now costed on AA).",
       "models": {
