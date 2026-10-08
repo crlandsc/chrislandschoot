@@ -22,9 +22,9 @@ Faint to vibrant by size within a lab: Anthropic Haiku → Sonnet → Opus → F
 
 ## Default chip selection
 
-Default off on board load and board switch: `grok46`, `opus48`, `sol`, `sol6`.
+Default off on board load and board switch: `grok46`, `opus48`, `sol`, `sol6`, `fable`.
 
-Everything else stays selected, including haiku55, opus55, sonnet55, fable, sol61, grok47, argon, astra, luna. The All button still selects every model. Models stay in the snapshot and chip list when off.
+Everything else stays selected, including haiku55, opus55, sonnet55, sol61, grok47, argon, astra, luna. The All button still selects every model. Models stay in the snapshot and chip list when off.
 
 ## Placeholders (not plotted yet)
 
