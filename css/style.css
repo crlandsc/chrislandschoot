@@ -543,13 +543,6 @@ header .container {
   will-change: transform; /* Optimize for animations */
 }
 
-.hero-bg img, .hero-bg video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: translateZ(0); /* Hardware acceleration */
-}
-
 /* Hero Canvas Animation */
 #hero-code-canvas {
   position: absolute;
@@ -674,17 +667,6 @@ header .container {
 
 /* All styles related to the timeline dot have been removed. */
 
-.experience-date {
-  margin-bottom: 12px;
-}
-
-.experience-date span {
-  display: inline-block;
-  font-weight: var(--font-weight-light);
-  color: var(--clr-text-secondary); /* Date color */
-  font-size: 0.9rem;
-}
-
 .experience-content p {
   color: var(--clr-text-primary); /* Experience description text */
   line-height: 1.6;
@@ -767,26 +749,6 @@ header .container {
 
 .project-card:hover h4 a {
   color: var(--clr-accent-primary); /* Turn text blue on card hover */
-}
-
-.project-demo {
-  margin: var(--space-s) 0;
-}
-
-.project-demo a {
-  display: inline-block;
-  background-color: var(--clr-accent-primary);
-  color: var(--clr-background-primary); /* Text on accent button */
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.project-demo a:hover {
-  background-color: var(--clr-accent-secondary);
-  color: var(--clr-background-primary);
-  text-decoration: none;
 }
 
 .project-card .meta {
