@@ -8,10 +8,6 @@ import sys
 import unicodedata as u
 from pathlib import Path
 
-# Defaults you requested
-DEFAULT_IN  = "/Users/chris/Desktop/Whitebalance/website/assets/binaural-externalization/test"
-DEFAULT_OUT = "/Users/chris/Desktop/Whitebalance/website/assets/binaural-externalization/rendered"
-
 VIDEO_EXTS = {".webm", ".mov"}
 
 def which_ffmpeg() -> str:
@@ -137,8 +133,8 @@ def convert_one(ffmpeg: str, ffprobe: str, infile: Path, outfile: Path, bitrate:
 
 def main():
     parser = argparse.ArgumentParser(description="Batch convert WebM/MOV assets to HEVC-with-Alpha .mov for iOS/Safari.")
-    parser.add_argument("-i", "--input",  default=DEFAULT_IN,  help="Input folder containing source files (default: provided path)")
-    parser.add_argument("-o", "--output", default=DEFAULT_OUT, help="Output folder for .mov files (default: provided path)")
+    parser.add_argument("-i", "--input",  required=True, help="Input folder containing source files")
+    parser.add_argument("-o", "--output", required=True, help="Output folder for .mov files")
     parser.add_argument("--bitrate", default="8M", help="Target video bitrate (default: 8M)")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing outputs")
     parser.add_argument("--recursive", action="store_true", help="Recurse into subfolders (default: off)")
