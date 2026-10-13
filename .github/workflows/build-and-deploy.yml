@@ -26,7 +26,9 @@ jobs:
         run: |
           mkdir _site
           rsync -a --exclude='*.md' --exclude='.DS_Store' index.html 404.html css js assets binaural-externalization binaural-externalization.html model-benchmarks _site/
-          test -f _site/index.html && test -f _site/404.html && test -f _site/binaural-externalization.html
+          test -f _site/index.html
+          test -f _site/404.html
+          test -f _site/binaural-externalization.html
           echo "files: $(find _site -type f | wc -l)  size: $(du -sm _site | cut -f1) MB"
           test "$(du -sm _site | cut -f1)" -lt 500
       - name: Upload artifact
