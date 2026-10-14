@@ -17,10 +17,10 @@ Live source of truth for plotted models: `data/live-cost-vs-score-latest.json` â
 | OpenAI | Astra | `#1A1A1A` (dark mode `#F0F0F0`) | astra |
 | Google | Argon | `#34A853` | argon |
 | SpaceXAI | Grok | `#5F39D0` | grok47 |
-| Meta | Muse Spark | `#869ACB` | musespark13 |
-| Meta | Muse Wonder | `#3177D8` | musewonder |
+| Meta | Muse Spark | `#5C85CC` (same in dark mode) | musespark13 |
+| Meta | Muse Wonder | `#097CCE` (same in dark mode) | musewonder |
 
-Why: lab families sit closer to the real company colors. Meta's Muse line takes the blues OpenAI used before (Spark, the smaller line, gets the fainter blue). OpenAI moves to a black and gray family.
+Why: lab families sit closer to the real company colors. Meta's Muse line takes the mid-to-deep blues OpenAI used before (former Terra and Astra; Spark, the smaller line, gets the fainter one). OpenAI moves to a black and gray family.
 
 Dark mode: `app.js` `DARK_COLOR_OVERRIDES` swaps the OpenAI grays (keyed by light hex) for light grays on the dark theme, keeping the size order, and re-renders chips and chart on theme toggle. JSON `style.colors` stays the light-mode source of truth. WCAG contrast vs plot background (light `#FFFFFF` / dark `#121212`): Luna 3.03 / 5.43, Terra 5.10 / 8.16, Sol 8.86 / 12.02, Astra 17.40 / 16.44.
 
