@@ -61,28 +61,6 @@
       font-display: swap;
     }
   </style>
-  <!-- Inline verification script -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      console.log('DOM loaded in inline script, will try to fetch content.json...');
-      
-      // Test direct fetch inside HTML
-      fetch('./content.json')
-        .then(response => {
-          console.log('Inline script - Fetch response status:', response.status);
-          if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Inline script - Content loaded successfully!', Object.keys(data));
-        })
-        .catch(error => {
-          console.error('Inline script - Error loading content:', error);
-        });
-    });
-  </script>
 </head>
 <body>
   <header>
@@ -328,7 +306,6 @@
 
         <h3 class="projects-subheading">Open-Source Projects</h3>
         <div class="projects-grid" id="projects-grid">
-          <!-- Project cards will be populated from content.json -->
           <article class="project-card" data-repo="crlandsc/tiny-audio-diffusion">
             <h4><a href="https://github.com/crlandsc/tiny-audio-diffusion" target="_blank" rel="noopener noreferrer">Tiny Audio Diffusion</a></h4>
             <p>
@@ -865,7 +842,6 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <!-- <script src="js/ios-video-fallback.js"></script> -->
   <script>
     // Make project cards clickable
     document.addEventListener('DOMContentLoaded', function() {

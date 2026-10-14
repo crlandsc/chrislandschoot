@@ -6,13 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Initialize all functionality
   // Note: Theme toggle is handled by main.js to avoid conflicts
-  initializeSmoothScrolling();
   initializeIntersectionObserver();
-  initializeNavigationHighlighting();
   initializeAudioPlayers(); // Initialize existing audio players first
   initializeComparisonGrid(); // This will create new ones and initialize them
-  initializeBackToTop();
-  initializeMobileNavigation();
   
   // Handle initial hash navigation
   handleInitialHash();
@@ -23,38 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-/**
- * Initialize smooth scrolling for navigation links
- */
-function initializeSmoothScrolling() {
-  const navLinks = document.querySelectorAll('a[href^="#"]');
-  
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      if (href === '#') return;
-      
-      e.preventDefault();
-      const targetId = href.substring(1);
-      const targetElement = document.getElementById(targetId);
-      
-      if (targetElement) {
-        const headerHeight = 70; // Account for fixed header - matches main site
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-        
-        // Update URL hash
-        history.pushState(null, null, href);
-      }
-    });
-  });
-}
 
 /**
  * Initialize custom audio players
@@ -243,57 +207,6 @@ function initializeIntersectionObserver() {
 }
 
 /**
- * Initialize navigation pill highlighting based on scroll position
- */
-function initializeNavigationHighlighting() {
-  const navPills = document.querySelectorAll('.nav-pill');
-  const sections = document.querySelectorAll('section[id]');
-  
-  const updateActiveNavPill = () => {
-    const scrollPosition = window.scrollY + 70; // Account for header - matches main site
-    
-    let activeSection = null;
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-        activeSection = section.getAttribute('id');
-      }
-    });
-    
-    navPills.forEach(pill => {
-      const href = pill.getAttribute('href');
-      if (href && href.startsWith('#')) {
-        const targetId = href.substring(1);
-        if (targetId === activeSection) {
-          pill.classList.add('active');
-        } else {
-          pill.classList.remove('active');
-        }
-      }
-    });
-  };
-  
-  // Throttled scroll handler
-  let ticking = false;
-  const scrollHandler = () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        updateActiveNavPill();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  };
-  
-  window.addEventListener('scroll', scrollHandler);
-  
-  // Initial check
-  updateActiveNavPill();
-}
-
-/**
  * Initialize simple grid comparison layout with audio samples
  */
 function initializeComparisonGrid() {
@@ -474,71 +387,6 @@ function createAudioPlayerSection(title, stereoUrl, binauralUrl, externalizedUrl
 }
 
 /**
- * Initialize back to top button
- */
-function initializeBackToTop() {
-  const backToTopButton = document.querySelector('.to-top');
-  if (!backToTopButton) return;
-  
-  const showButton = () => {
-    if (window.scrollY > 300) {
-      backToTopButton.classList.add('visible');
-    } else {
-      backToTopButton.classList.remove('visible');
-    }
-  };
-  
-  // Throttled scroll handler
-  let ticking = false;
-  const scrollHandler = () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        showButton();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  };
-  
-  window.addEventListener('scroll', scrollHandler);
-  
-  backToTopButton.addEventListener('click', () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-  
-  // Initial check
-  showButton();
-}
-
-/**
- * Initialize mobile navigation
- */
-function initializeMobileNavigation() {
-  const mobileNav = document.querySelector('.mobile-nav');
-  if (!mobileNav) return;
-  
-  const summary = mobileNav.querySelector('summary');
-  const navLinks = mobileNav.querySelectorAll('a[href^="#"]');
-  
-  // Close mobile nav when a link is clicked
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav.removeAttribute('open');
-    });
-  });
-  
-  // Close mobile nav when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!mobileNav.contains(e.target) && mobileNav.hasAttribute('open')) {
-      mobileNav.removeAttribute('open');
-    }
-  });
-}
-
-/**
  * Handle initial hash navigation
  */
 function handleInitialHash() {
@@ -560,21 +408,6 @@ function handleInitialHash() {
       }, 100);
     }
   }
-}
-
-/**
- * Utility function to debounce function calls
- */
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
 }
 
 // Handle page visibility changes to pause audio when page is hidden
