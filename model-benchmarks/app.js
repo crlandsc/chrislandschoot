@@ -51,10 +51,8 @@
     sol6: "openai",
     sol61: "openai",
     luna: "openai",
-    sol: "openai",
     argon: "google",
     grok47: "spacexai",
-    grok46: "spacexai",
     musewonder: "meta",
     musespark13: "meta",
   };
@@ -69,15 +67,13 @@
     "sol61",
     "sol6",
     "luna",
-    "sol",
     "argon",
     "grok47",
-    "grok46",
     "musewonder",
     "musespark13",
   ];
   // Still listed and plottable; omitted only from the board-load / board-switch default.
-  const DEFAULT_DESELECTED = new Set(["grok46", "opus48", "sol", "sol6", "fable"]);
+  const DEFAULT_DESELECTED = new Set(["opus48", "sol6", "fable"]);
 
   // Dark-theme swaps keyed by light-mode hex (style.colors). OpenAI grays flip to light
   // grays so they stay readable on the dark plot; faint-to-vibrant size order is kept.

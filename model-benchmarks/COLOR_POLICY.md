@@ -13,10 +13,10 @@ Live source of truth for plotted models: `data/live-cost-vs-score-latest.json` �
 | Anthropic | Opus | `#E45825` | opus48, opus55 |
 | Anthropic | Fable | `#E1470E` | fable |
 | OpenAI | Luna | `#949494` (dark mode `#8A8A8A`) | luna |
-| OpenAI | Sol | `#4A4A4A` (dark mode `#CFCFCF`) | sol, sol6, sol61 |
+| OpenAI | Sol | `#4A4A4A` (dark mode `#CFCFCF`) | sol6, sol61 |
 | OpenAI | Astra | `#1A1A1A` (dark mode `#F0F0F0`) | astra |
 | Google | Argon | `#34A853` | argon |
-| SpaceXAI | Grok | `#5F39D0` | grok46, grok47 |
+| SpaceXAI | Grok | `#5F39D0` | grok47 |
 | Meta | Muse Spark | `#869ACB` | musespark13 |
 | Meta | Muse Wonder | `#3177D8` | musewonder |
 
@@ -28,7 +28,9 @@ Faint to vibrant by size within a lab: Anthropic Haiku → Sonnet → Opus → F
 
 ## Default chip selection
 
-Default off on board load and board switch: `grok46`, `opus48`, `sol`, `sol6`, `fable`.
+Default off on board load and board switch: `opus48`, `sol6`, `fable`.
+
+Retired 2026-10-14 (removed from data, chips and defaults): GPT-5.6 Sol (`sol`) and Grok 4.6 (`grok46`).
 
 Everything else stays selected, including haiku55, opus55, sonnet55, sol61, grok47, argon, astra, luna, musespark13, musewonder. The All button still selects every model. Models stay in the snapshot and chip list when off.
 

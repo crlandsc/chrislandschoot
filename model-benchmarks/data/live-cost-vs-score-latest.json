@@ -6,10 +6,8 @@
   "style": {
     "colors": {
       "fable": "#E1470E",
-      "grok46": "#5F39D0",
       "grok47": "#5F39D0",
       "opus48": "#E45825",
-      "sol": "#4A4A4A",
       "astra": "#1A1A1A",
       "opus55": "#E45825",
       "sol6": "#4A4A4A",
@@ -23,10 +21,8 @@
     },
     "markers": {
       "fable": "o",
-      "grok46": "s",
       "grok47": "^",
       "opus48": "D",
-      "sol": "P",
       "astra": "X",
       "opus55": "v",
       "sol6": "*",
@@ -35,15 +31,13 @@
       "sol61": "<",
       "argon": ">",
       "haiku55": "d",
-      "musespark13": "o",
+      "musespark13": "P",
       "musewonder": "s"
     },
     "labels": {
       "fable": "Fable 5.1",
       "opus48": "Opus 4.8",
-      "grok46": "Grok 4.6",
       "grok47": "Grok 4.7",
-      "sol": "GPT-5.6 Sol",
       "astra": "GPT-6 Astra",
       "opus55": "Opus 5.5",
       "sol6": "GPT-6 Sol",
@@ -265,32 +259,6 @@
           ],
           "baseline": "sep23_board"
         },
-        "grok46": {
-          "label": "Grok 4.6",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 2.25,
-              "score_pct": 33.4
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 3.48,
-              "score_pct": 36.1
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 5.2,
-              "score_pct": 40.4
-            },
-            {
-              "effort": "extra",
-              "cost_per_task_usd": 6.1,
-              "score_pct": 41.4
-            }
-          ],
-          "baseline": "sep23_board"
-        },
         "grok47": {
           "label": "Grok 4.7",
           "points": [
@@ -344,37 +312,6 @@
               "effort": "max",
               "cost_per_task_usd": 13.43,
               "score_pct": 57.8
-            }
-          ],
-          "baseline": "sep23_board"
-        },
-        "sol": {
-          "label": "GPT-5.6 Sol",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 0.87,
-              "score_pct": 24.6
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 1.77,
-              "score_pct": 31.1
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 2.85,
-              "score_pct": 35.7
-            },
-            {
-              "effort": "extra",
-              "cost_per_task_usd": 4.4,
-              "score_pct": 37.7
-            },
-            {
-              "effort": "max",
-              "cost_per_task_usd": 8.23,
-              "score_pct": 41.7
             }
           ],
           "baseline": "sep23_board"
@@ -557,32 +494,6 @@
           ],
           "baseline": "sep23_board"
         },
-        "grok46": {
-          "label": "Grok 4.6",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 0.37578773607022314,
-              "intelligence_index": 35.1246953482174
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 1.14381661681713,
-              "intelligence_index": 42.836322654063
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 1.4848449196688633,
-              "intelligence_index": 44.3113073012592
-            },
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 1.7523145158282367,
-              "intelligence_index": 44.199810436996
-            }
-          ],
-          "baseline": "sep23_board"
-        },
         "grok47": {
           "label": "Grok 4.7",
           "points": [
@@ -603,37 +514,6 @@
             }
           ],
           "baseline": "live_2026-10-02_pm"
-        },
-        "sol": {
-          "label": "GPT-5.6 Sol",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 0.2606419442090313,
-              "intelligence_index": 33.4731387646002
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 0.5049926304382959,
-              "intelligence_index": 39.2363585889147
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 0.807982690134498,
-              "intelligence_index": 42.3461010420519
-            },
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 1.1843629381907275,
-              "intelligence_index": 44.008876369169
-            },
-            {
-              "effort": "max",
-              "cost_per_task_usd": 1.98845538085375,
-              "intelligence_index": 46.9727068915036
-            }
-          ],
-          "baseline": "sep23_board"
         },
         "opus55": {
           "label": "Opus 5.5",
@@ -1058,34 +938,6 @@
           "baseline": "live_2026-09-29_pm_reconfirmed",
           "aa_label": "Grok Build - Grok 4.7 (xhigh)"
         },
-        "sol": {
-          "label": "GPT-5.6 Sol",
-          "harness": "Codex",
-          "ladder": "single_point_only",
-          "points": [
-            {
-              "effort": "max",
-              "cost_per_task_usd": 6.353318230693071,
-              "coding_agent_index": 54.559127289644
-            }
-          ],
-          "baseline": "live_2026-09-29_pm_reconfirmed",
-          "aa_label": "Codex - GPT-5.6 Sol (max) ({'reasoning_effort': 'max'})"
-        },
-        "grok46": {
-          "label": "Grok 4.6",
-          "harness": "Grok Build",
-          "ladder": "single_point_only",
-          "points": [
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 3.5701432805280535,
-              "coding_agent_index": 46.96895205744764
-            }
-          ],
-          "baseline": "live_2026-09-29_pm_reconfirmed",
-          "aa_label": "Grok Build - Grok 4.6 (xhigh)"
-        },
         "luna": {
           "label": "GPT-6 Luna",
           "harness": "Codex",
@@ -1228,9 +1080,7 @@
         "astra": "single_point_only",
         "sol6": "single_point_only",
         "luna": "single_point_only",
-        "sol": "single_point_only",
         "grok47": "single_point_only",
-        "grok46": "single_point_only",
         "opus48": "unpublished",
         "haiku55": "full_ladder",
         "musespark13": "partial_ladder",
@@ -1288,32 +1138,6 @@
           ],
           "baseline": "sep23_board"
         },
-        "grok46": {
-          "label": "Grok 4.6",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 1.810486192313955,
-              "score_pct": 3.03030303030303
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 4.930218118430546,
-              "score_pct": 13.1313131313131
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 5.877412948691136,
-              "score_pct": 21.2121212121212
-            },
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 6.595499239020591,
-              "score_pct": 17.171717171717198
-            }
-          ],
-          "baseline": "sep23_board"
-        },
         "grok47": {
           "label": "Grok 4.7",
           "points": [
@@ -1334,37 +1158,6 @@
             }
           ],
           "baseline": "live_2026-10-02_pm"
-        },
-        "sol": {
-          "label": "GPT-5.6 Sol",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 0.5243900018432627,
-              "score_pct": 1.01010101010101
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 1.6444740584699944,
-              "score_pct": 14.6464646464646
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 2.2248980746095803,
-              "score_pct": 20.7070707070707
-            },
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 3.4641189667402976,
-              "score_pct": 24.747474747474698
-            },
-            {
-              "effort": "max",
-              "cost_per_task_usd": 8.093173260861855,
-              "score_pct": 39.8989898989899
-            }
-          ],
-          "baseline": "sep23_board"
         },
         "astra": {
           "label": "GPT-6 Astra",
@@ -1717,32 +1510,6 @@
           ],
           "baseline": "sep23_board"
         },
-        "grok46": {
-          "label": "Grok 4.6",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 0.00979515972222222,
-              "score_pct": 49.421296296296305
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 0.023294180555555554,
-              "score_pct": 55.9027777777778
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 0.027178340277777775,
-              "score_pct": 56.4814814814815
-            },
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 0.029567694444444445,
-              "score_pct": 53.0092592592593
-            }
-          ],
-          "baseline": "sep23_board"
-        },
         "grok47": {
           "label": "Grok 4.7",
           "points": [
@@ -1763,37 +1530,6 @@
             }
           ],
           "baseline": "live_2026-10-02_pm"
-        },
-        "sol": {
-          "label": "GPT-5.6 Sol",
-          "points": [
-            {
-              "effort": "low",
-              "cost_per_task_usd": 0.024094624999999998,
-              "score_pct": 56.3657407407407
-            },
-            {
-              "effort": "medium",
-              "cost_per_task_usd": 0.028483874999999995,
-              "score_pct": 57.4074074074074
-            },
-            {
-              "effort": "high",
-              "cost_per_task_usd": 0.03528609722222222,
-              "score_pct": 57.7546296296296
-            },
-            {
-              "effort": "xhigh",
-              "cost_per_task_usd": 0.044891458333333335,
-              "score_pct": 57.0601851851852
-            },
-            {
-              "effort": "max",
-              "cost_per_task_usd": 0.07969684722222221,
-              "score_pct": 57.0601851851852
-            }
-          ],
-          "baseline": "sep23_board"
         },
         "astra": {
           "label": "GPT-6 Astra",
@@ -2104,9 +1840,7 @@
       "astra_ladder": "Only Codex (max) published.",
       "sol6_ladder": "Only Codex (max) published.",
       "luna_ladder": "Only Codex (max) published.",
-      "sol_ladder": "Only Codex (max) published.",
       "grok47_ladder": "Only Grok Build (xhigh) published. grok-4-7-low is live and costed on Intelligence/TB4/SciCode but has no Coding Agent row. grok-4-7-medium still 404. grok-4-7-xhigh slug 404 (xhigh is base grok-4-7).",
-      "grok46_ladder": "Only Grok Build (xhigh) published; grok-4-6-high model page 404.",
       "argon_ladder": "Only Antigravity CLI (high) published — no low/medium/xhigh/max Coding Agent rows."
     },
     "cursorbench_4_0": {
@@ -2129,7 +1863,8 @@
       "ADDED 2026-10-07 ~3:30pm ET: Haiku 5.5 (claude-haiku-5-5*). AA Intelligence / TB4 / SciCode: only xhigh and max are costed (low/medium/high scored, uncosted, AA labels all variants \"Default Fallback\"). CursorBench 4.0: full low→max ladder. Coding Agent: not listed.",
       "UPDATED 2026-10-08 ~8:00am ET: Sonnet 5.5 $/task cut on AA Intelligence / TB4 and CursorBench (scores unchanged). Haiku 5.5 low / medium / high now costed on AA Intelligence / TB4 / SciCode, and Haiku 5.5 has a full Claude Code ladder on Coding Agent.",
       "ADDED 2026-10-14 ~7:51am ET: Gemini 4 Argon on CursorBench 4.0 (Minimal/Low/Medium/High). AA Intelligence/TB4/SciCode/Coding Agent unchanged (noise-only Luna <0.25% $/task and Haiku 5.5 Low Intel +0.003).",
-      "ADDED 2026-10-14 ~10:30am ET: Meta Muse lab group. Muse Spark 1.3 (AA xhigh/max, CursorBench minimal-max) and Muse Wonder max (AA only). Wonder Full is scored but uncosted on AA, so not plotted. OpenAI moved to grays; Muse took the former OpenAI blues."
+      "ADDED 2026-10-14 ~10:30am ET: Meta Muse lab group. Muse Spark 1.3 (AA xhigh/max, CursorBench minimal-max) and Muse Wonder max (AA only). Wonder Full is scored but uncosted on AA, so not plotted. OpenAI moved to grays; Muse took the former OpenAI blues.",
+      "RETIRED 2026-10-14 ~10:40am ET: GPT-5.6 Sol (sol) and Grok 4.6 (grok46) removed from every board. Meta markers: Muse Spark 1.3 cross, Muse Wonder square."
     ],
     "aa_intelligence_v4_3_2": {
       "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404.",
