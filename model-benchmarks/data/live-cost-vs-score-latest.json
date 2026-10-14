@@ -9,15 +9,17 @@
       "grok46": "#5F39D0",
       "grok47": "#5F39D0",
       "opus48": "#E45825",
-      "sol": "#3177D8",
-      "astra": "#097CCE",
+      "sol": "#4A4A4A",
+      "astra": "#1A1A1A",
       "opus55": "#E45825",
-      "sol6": "#3177D8",
-      "luna": "#869ACB",
+      "sol6": "#4A4A4A",
+      "luna": "#949494",
       "sonnet55": "#D67551",
-      "sol61": "#3177D8",
+      "sol61": "#4A4A4A",
       "argon": "#34A853",
-      "haiku55": "#DE9A72"
+      "haiku55": "#DE9A72",
+      "musespark13": "#869ACB",
+      "musewonder": "#3177D8"
     },
     "markers": {
       "fable": "o",
@@ -32,7 +34,9 @@
       "sonnet55": "p",
       "sol61": "<",
       "argon": ">",
-      "haiku55": "d"
+      "haiku55": "d",
+      "musespark13": "o",
+      "musewonder": "s"
     },
     "labels": {
       "fable": "Fable 5.1",
@@ -47,7 +51,9 @@
       "sonnet55": "Sonnet 5.5",
       "sol61": "GPT-6.1 Sol",
       "argon": "Gemini 4 Argon",
-      "haiku55": "Haiku 5.5"
+      "haiku55": "Haiku 5.5",
+      "musespark13": "Muse Spark 1.3",
+      "musewonder": "Muse Wonder"
     },
     "style_module": "/workspace/model_plot_style.py"
   },
@@ -226,7 +232,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://cursor.com/cursorbench",
-      "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 low/medium/high/extra/max (OG asset cb-10-07-haiku-5-5-v2); other points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 26–28% (OG asset cb-10-07-sonnet-5-5-cache-read); scores and tokens unchanged; other points unchanged. Re-checked 2026-10-14 ~7:51am ET: ADDED Gemini 4 Argon Minimal/Low/Medium/High (48.8% @ $3.54 → 52.9% @ $4.57); Gemini 3.8 Flash High/Medium no longer on the live chart; other watch-set points unchanged (Grok 4.6 still unpublished).",
+      "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 low/medium/high/extra/max (OG asset cb-10-07-haiku-5-5-v2); other points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 26–28% (OG asset cb-10-07-sonnet-5-5-cache-read); scores and tokens unchanged; other points unchanged. Re-checked 2026-10-14 ~7:51am ET: ADDED Gemini 4 Argon Minimal/Low/Medium/High (48.8% @ $3.54 → 52.9% @ $4.57); Gemini 3.8 Flash High/Medium no longer on the live chart; other watch-set points unchanged (Grok 4.6 still unpublished). Re-checked 2026-10-14 ~10:30am ET: ADDED Muse Spark 1.3 Minimal/Low/Medium/High/Extra/Max (24.3% @ $0.56 to 41.6% @ $2.64); other points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -461,6 +467,42 @@
             }
           ],
           "baseline": "live_2026-10-07_pm"
+        },
+        "musespark13": {
+          "label": "Muse Spark 1.3",
+          "points": [
+            {
+              "effort": "minimal",
+              "cost_per_task_usd": 0.56,
+              "score_pct": 24.3
+            },
+            {
+              "effort": "low",
+              "cost_per_task_usd": 0.93,
+              "score_pct": 29.3
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 1.49,
+              "score_pct": 32.6
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 1.66,
+              "score_pct": 33.4
+            },
+            {
+              "effort": "extra",
+              "cost_per_task_usd": 2.1,
+              "score_pct": 37.5
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 2.64,
+              "score_pct": 41.6
+            }
+          ],
+          "baseline": "live_2026-10-14_am"
         }
       }
     },
@@ -471,7 +513,7 @@
       "y": "intelligence_index",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 17–29% (AA recomputed cost); scores unchanged. ADDED Haiku 5.5 low / medium / high (now costed on AA).",
+      "source_notes": "currentModel JSON: intelligenceIndex + intelligenceIndexCostPerTask.cost.total. Live-checked 2026-10-02 ~5:00pm ET. ADDED Grok 4.7 Low (grok-4-7-low): 42.2166560223448 @ $1.2479664056943975. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Other watch-set Intelligence points left as 2026-10-02 ~8:00am ET store. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 17–29% (AA recomputed cost); scores unchanged. ADDED Haiku 5.5 low / medium / high (now costed on AA). Re-checked 2026-10-14 ~10:30am ET: ADDED Meta Muse Spark 1.3 xhigh/max and Muse Wonder max. Muse Wonder Full and older Muse models left out. Other watch-set points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -859,6 +901,47 @@
             "xhigh": "https://artificialanalysis.ai/models/claude-haiku-5-5-xhigh",
             "max": "https://artificialanalysis.ai/models/claude-haiku-5-5"
           }
+        },
+        "musespark13": {
+          "label": "Muse Spark 1.3",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 1.3677936514692752,
+              "intelligence_index": 45.0732966922226
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 1.6048932100125866,
+              "intelligence_index": 48.0923107719685
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_slugs": {
+            "xhigh": "muse-spark-1-3-xhigh",
+            "max": "muse-spark-1-3"
+          },
+          "aa_urls": {
+            "xhigh": "https://artificialanalysis.ai/models/muse-spark-1-3-xhigh",
+            "max": "https://artificialanalysis.ai/models/muse-spark-1-3"
+          }
+        },
+        "musewonder": {
+          "label": "Muse Wonder",
+          "points": [
+            {
+              "effort": "max",
+              "cost_per_task_usd": 4.515677444063016,
+              "intelligence_index": 52.393894697293
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_slugs": {
+            "max": "muse-wonder"
+          },
+          "aa_urls": {
+            "max": "https://artificialanalysis.ai/models/muse-wonder"
+          }
         }
       }
     },
@@ -869,7 +952,7 @@
       "y": "coding_agent_index",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/agents/coding-agents",
-      "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Re-checked 2026-10-02 ~5:00pm ET: Grok 4.7 still Grok Build (xhigh) only. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished. Re-checked 2026-10-07 ~3:30pm ET: no Haiku 5.5 row yet (31 rows, unchanged). Re-checked 2026-10-08 ~8:00am ET: ADDED Haiku 5.5 full Claude Code ladder (low–max); 37 rows. Sonnet 5.5 Coding Agent points unchanged.",
+      "source_notes": "Native harness only (Claude Code / Codex / Grok Build). Devin Fusion omitted. Re-checked 2026-10-02 ~5:00pm ET: Grok 4.7 still Grok Build (xhigh) only. FULL ladder: Sonnet 5.5 Claude Code only. All other watch models remain single published points. Opus 4.8 unpublished. Re-checked 2026-10-07 ~3:30pm ET: no Haiku 5.5 row yet (31 rows, unchanged). Re-checked 2026-10-08 ~8:00am ET: ADDED Haiku 5.5 full Claude Code ladder (low–max); 37 rows. Sonnet 5.5 Coding Agent points unchanged. Re-checked 2026-10-14 ~10:30am ET: ADDED Meta Muse Spark 1.3 xhigh/max and Muse Wonder max. Muse Wonder Full and older Muse models left out. Other watch-set points unchanged.",
       "models": {
         "sonnet55": {
           "label": "Sonnet 5.5",
@@ -1098,6 +1181,44 @@
           ],
           "baseline": "live_2026-10-08",
           "aa_label": "Claude Code - Haiku 5.5 ({effort})"
+        },
+        "musespark13": {
+          "label": "Muse Spark 1.3",
+          "harness": "Muse Code",
+          "ladder": "partial_ladder",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 3.467754041474145,
+              "coding_agent_index": 48.2993172759088
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 3.977504096947204,
+              "coding_agent_index": 54.30273329930766
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_labels": {
+            "xhigh": "Muse Code - Muse Spark 1.3 (xhigh)",
+            "max": "Muse Code - Muse Spark 1.3 (max)"
+          }
+        },
+        "musewonder": {
+          "label": "Muse Wonder",
+          "harness": "Muse Code",
+          "ladder": "single_point_only",
+          "points": [
+            {
+              "effort": "max",
+              "cost_per_task_usd": 8.052232502530256,
+              "coding_agent_index": 63.49675266318143
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_labels": {
+            "max": "Muse Code - Muse Wonder (max)"
+          }
         }
       },
       "ladder_status": {
@@ -1111,7 +1232,9 @@
         "grok47": "single_point_only",
         "grok46": "single_point_only",
         "opus48": "unpublished",
-        "haiku55": "full_ladder"
+        "haiku55": "full_ladder",
+        "musespark13": "partial_ladder",
+        "musewonder": "single_point_only"
       }
     },
     "terminal_bench_4_0": {
@@ -1121,7 +1244,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 29–33% (AA recomputed cost); scores unchanged. ADDED Haiku 5.5 low / medium / high (now costed on AA).",
+      "source_notes": "intelligenceIndexEvaluations[slug=terminalbench-4-0]: score×100, costPerTask; harness mini-swe-agent. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-06 ~8:00am ET: Grok 4.6 low–xhigh $/task down 20–27% (AA recomputed its cache-write cost); scores unchanged. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 29–33% (AA recomputed cost); scores unchanged. ADDED Haiku 5.5 low / medium / high (now costed on AA). Re-checked 2026-10-14 ~10:30am ET: ADDED Meta Muse Spark 1.3 xhigh/max and Muse Wonder max. Muse Wonder Full and older Muse models left out. Other watch-set points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1499,6 +1622,47 @@
             "xhigh": "https://artificialanalysis.ai/models/claude-haiku-5-5-xhigh",
             "max": "https://artificialanalysis.ai/models/claude-haiku-5-5"
           }
+        },
+        "musespark13": {
+          "label": "Muse Spark 1.3",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 6.231928608636364,
+              "score_pct": 16.6666666666667
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 6.938794507272731,
+              "score_pct": 33.3333333333333
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_slugs": {
+            "xhigh": "muse-spark-1-3-xhigh",
+            "max": "muse-spark-1-3"
+          },
+          "aa_urls": {
+            "xhigh": "https://artificialanalysis.ai/models/muse-spark-1-3-xhigh",
+            "max": "https://artificialanalysis.ai/models/muse-spark-1-3"
+          }
+        },
+        "musewonder": {
+          "label": "Muse Wonder",
+          "points": [
+            {
+              "effort": "max",
+              "cost_per_task_usd": 17.968136550000004,
+              "score_pct": 52.020202020202
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_slugs": {
+            "max": "muse-wonder"
+          },
+          "aa_urls": {
+            "max": "https://artificialanalysis.ai/models/muse-wonder"
+          }
         }
       }
     },
@@ -1509,7 +1673,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://artificialanalysis.ai/models/{slug}",
-      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: ADDED Haiku 5.5 low / medium / high (now costed on AA). Sonnet 5.5 SciCode $/task unchanged.",
+      "source_notes": "intelligenceIndexEvaluations[slug=scicode]: score×100, costPerTask; 288 test-set subproblems. Live-checked 2026-10-02 ~5:00pm ET: added Grok 4.7 Low. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 xhigh (claude-haiku-5-5-xhigh) and max (claude-haiku-5-5); AA lists low/medium/high with scores but no cost per task yet, so they are not plotted. Other watch-set points unchanged. Re-checked 2026-10-08 ~8:00am ET: ADDED Haiku 5.5 low / medium / high (now costed on AA). Sonnet 5.5 SciCode $/task unchanged. Re-checked 2026-10-14 ~10:30am ET: ADDED Meta Muse Spark 1.3 xhigh/max and Muse Wonder max. Muse Wonder Full and older Muse models left out. Other watch-set points unchanged.",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -1887,6 +2051,47 @@
             "xhigh": "https://artificialanalysis.ai/models/claude-haiku-5-5-xhigh",
             "max": "https://artificialanalysis.ai/models/claude-haiku-5-5"
           }
+        },
+        "musespark13": {
+          "label": "Muse Spark 1.3",
+          "points": [
+            {
+              "effort": "xhigh",
+              "cost_per_task_usd": 0.03716573697916666,
+              "score_pct": 59.7222222222222
+            },
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.03927459895833333,
+              "score_pct": 58.796296296296305
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_slugs": {
+            "xhigh": "muse-spark-1-3-xhigh",
+            "max": "muse-spark-1-3"
+          },
+          "aa_urls": {
+            "xhigh": "https://artificialanalysis.ai/models/muse-spark-1-3-xhigh",
+            "max": "https://artificialanalysis.ai/models/muse-spark-1-3"
+          }
+        },
+        "musewonder": {
+          "label": "Muse Wonder",
+          "points": [
+            {
+              "effort": "max",
+              "cost_per_task_usd": 0.134993125,
+              "score_pct": 60.300925925925895
+            }
+          ],
+          "baseline": "live_2026-10-14_am",
+          "aa_slugs": {
+            "max": "muse-wonder"
+          },
+          "aa_urls": {
+            "max": "https://artificialanalysis.ai/models/muse-wonder"
+          }
         }
       }
     }
@@ -1909,7 +2114,8 @@
       "sol6": "GPT-6 Sol not listed on CursorBench 4.0",
       "luna": "GPT-6 Luna not listed on CursorBench 4.0",
       "opus48": "Opus 4.8 not listed on CursorBench 4.0",
-      "sol61": "GPT-6.1 Sol not listed on CursorBench 4.0"
+      "sol61": "GPT-6.1 Sol not listed on CursorBench 4.0",
+      "musewonder": "Muse Wonder not listed on CursorBench 4.0"
     },
     "notes": [
       "2026-09-29 ~1:28pm ET Coding Agent ladder audit: AA board still has 25 variants; among watch set only Sonnet 5.5 has full Claude Code low→max ladder. No new ladder points vs morning plot.",
@@ -1922,7 +2128,8 @@
       "ADDED 2026-10-02 ~5:00pm ET: Grok 4.7 Low (grok-4-7-low) on AA Intelligence (42.217 @ $1.248), Terminal-Bench 4.0 (16.162% @ $6.331), SciCode (54.861% @ $0.027). Medium still 404. Coding Agent still Grok Build xhigh only.",
       "ADDED 2026-10-07 ~3:30pm ET: Haiku 5.5 (claude-haiku-5-5*). AA Intelligence / TB4 / SciCode: only xhigh and max are costed (low/medium/high scored, uncosted, AA labels all variants \"Default Fallback\"). CursorBench 4.0: full low→max ladder. Coding Agent: not listed.",
       "UPDATED 2026-10-08 ~8:00am ET: Sonnet 5.5 $/task cut on AA Intelligence / TB4 and CursorBench (scores unchanged). Haiku 5.5 low / medium / high now costed on AA Intelligence / TB4 / SciCode, and Haiku 5.5 has a full Claude Code ladder on Coding Agent.",
-      "ADDED 2026-10-14 ~7:51am ET: Gemini 4 Argon on CursorBench 4.0 (Minimal/Low/Medium/High). AA Intelligence/TB4/SciCode/Coding Agent unchanged (noise-only Luna <0.25% $/task and Haiku 5.5 Low Intel +0.003)."
+      "ADDED 2026-10-14 ~7:51am ET: Gemini 4 Argon on CursorBench 4.0 (Minimal/Low/Medium/High). AA Intelligence/TB4/SciCode/Coding Agent unchanged (noise-only Luna <0.25% $/task and Haiku 5.5 Low Intel +0.003).",
+      "ADDED 2026-10-14 ~10:30am ET: Meta Muse lab group. Muse Spark 1.3 (AA xhigh/max, CursorBench minimal-max) and Muse Wonder max (AA only). Wonder Full is scored but uncosted on AA, so not plotted. OpenAI moved to grays; Muse took the former OpenAI blues."
     ],
     "aa_intelligence_v4_3_2": {
       "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404.",

@@ -38,6 +38,7 @@
     { id: "openai", label: "OpenAI", match: /gpt|codex|\bo\d/i },
     { id: "google", label: "Google", match: /gemini|gemma/i },
     { id: "spacexai", label: "SpaceXAI", match: /grok/i },
+    { id: "meta", label: "Meta", match: /muse|llama/i },
   ];
   const OTHER_PROVIDER = { id: "other", label: "Other" };
   const MODEL_PROVIDERS = {
@@ -54,6 +55,8 @@
     argon: "google",
     grok47: "spacexai",
     grok46: "spacexai",
+    musewonder: "meta",
+    musespark13: "meta",
   };
   // Newest first within each provider. Models missing from this list sort to the front of their group.
   const MODEL_RECENCY = [
@@ -70,9 +73,20 @@
     "argon",
     "grok47",
     "grok46",
+    "musewonder",
+    "musespark13",
   ];
   // Still listed and plottable; omitted only from the board-load / board-switch default.
   const DEFAULT_DESELECTED = new Set(["grok46", "opus48", "sol", "sol6", "fable"]);
+
+  // Dark-theme swaps keyed by light-mode hex (style.colors). OpenAI grays flip to light
+  // grays so they stay readable on the dark plot; faint-to-vibrant size order is kept.
+  const DARK_COLOR_OVERRIDES = {
+    "#949494": "#8A8A8A",
+    "#6E6E6E": "#ABABAB",
+    "#4A4A4A": "#CFCFCF",
+    "#1A1A1A": "#F0F0F0",
+  };
 
   const FALLBACK_COLORS = [
     "#4A90E2",
@@ -158,7 +172,10 @@
       html.removeAttribute("data-theme");
       els.themeToggle.setAttribute("aria-label", "Switch to dark mode");
     }
-    if (state.payload && state.boardId) drawChart();
+    if (state.payload && state.boardId) {
+      renderModels();
+      drawChart();
+    }
   }
 
   function initTheme() {
@@ -257,7 +274,9 @@
   }
 
   function colorFor(id, index) {
-    return styleMaps().colors[id] || FALLBACK_COLORS[index % FALLBACK_COLORS.length];
+    const base = styleMaps().colors[id] || FALLBACK_COLORS[index % FALLBACK_COLORS.length];
+    if (currentTheme() !== "dark") return base;
+    return DARK_COLOR_OVERRIDES[String(base).toUpperCase()] || base;
   }
 
   function markerFor(id) {
