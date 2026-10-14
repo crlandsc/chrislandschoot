@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-10-08",
-  "as_of_et": "2026-10-08 ~8:00am ET",
+  "as_of": "2026-10-14",
+  "as_of_et": "2026-10-14 ~7:51am ET",
   "timezone": "America/New_York",
   "created_for": "Grok 4.7 Low ladder add 2026-10-02 ~5:00pm ET – grok-4-7-low is live and costed on AA Intelligence / Terminal-Bench 4.0 / SciCode. Existing grok47 high/xhigh unchanged. grok-4-7-medium still 404. Coding Agent still Grok Build (xhigh) only. Other watch-set scores/costs left as 2026-10-02 ~8:00am ET store.",
   "style": {
@@ -60,7 +60,7 @@
     "plot_coding": "/workspace/plot_coding_agent_ladders_2026-10-01-sol61-argon.py",
     "plot_boards": "/workspace/plot_model_boards_2026-10-02.py"
   },
-  "fetch_cache": "/workspace/aa-fetch-2026-10-08",
+  "fetch_cache": "/workspace/aa-fetch-2026-10-14",
   "sonnet55_live": {
     "display_name": "Sonnet 5.5",
     "key": "sonnet55",
@@ -226,7 +226,7 @@
       "y": "score_pct",
       "x_scale": "log",
       "source": "https://cursor.com/cursorbench",
-      "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 low/medium/high/extra/max (OG asset cb-10-07-haiku-5-5-v2); other points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 26–28% (OG asset cb-10-07-sonnet-5-5-cache-read); scores and tokens unchanged; other points unchanged.",
+      "source_notes": "aria-label / table cells; changelog section still 2026-09-10; OG asset cb-09-25-sonnet-5-5. Re-checked 2026-10-07 ~3:30pm ET: ADDED Haiku 5.5 low/medium/high/extra/max (OG asset cb-10-07-haiku-5-5-v2); other points unchanged. Re-checked 2026-10-08 ~8:00am ET: Sonnet 5.5 low–max $/task down 26–28% (OG asset cb-10-07-sonnet-5-5-cache-read); scores and tokens unchanged; other points unchanged. Re-checked 2026-10-14 ~7:51am ET: ADDED Gemini 4 Argon Minimal/Low/Medium/High (48.8% @ $3.54 → 52.9% @ $4.57); Gemini 3.8 Flash High/Medium no longer on the live chart; other watch-set points unchanged (Grok 4.6 still unpublished).",
       "models": {
         "fable": {
           "label": "Fable 5.1",
@@ -403,6 +403,33 @@
             }
           ],
           "baseline": "live_2026-09-28"
+        },
+        "argon": {
+          "label": "Gemini 4 Argon",
+          "points": [
+            {
+              "effort": "minimal",
+              "cost_per_task_usd": 3.54,
+              "score_pct": 48.8
+            },
+            {
+              "effort": "low",
+              "cost_per_task_usd": 4.09,
+              "score_pct": 50.6
+            },
+            {
+              "effort": "medium",
+              "cost_per_task_usd": 4.39,
+              "score_pct": 52.8
+            },
+            {
+              "effort": "high",
+              "cost_per_task_usd": 4.57,
+              "score_pct": 52.9
+            }
+          ],
+          "baseline": "live_2026-10-14",
+          "note": "NEW on CursorBench 2026-10-14: Minimal/Low/Medium/High (Gemini 3.8 Flash High/Medium dropped from the live chart)."
         },
         "haiku55": {
           "label": "Haiku 5.5",
@@ -1882,8 +1909,7 @@
       "sol6": "GPT-6 Sol not listed on CursorBench 4.0",
       "luna": "GPT-6 Luna not listed on CursorBench 4.0",
       "opus48": "Opus 4.8 not listed on CursorBench 4.0",
-      "sol61": "GPT-6.1 Sol not listed on CursorBench 4.0",
-      "argon": "Gemini 4 Argon not listed on CursorBench 4.0"
+      "sol61": "GPT-6.1 Sol not listed on CursorBench 4.0"
     },
     "notes": [
       "2026-09-29 ~1:28pm ET Coding Agent ladder audit: AA board still has 25 variants; among watch set only Sonnet 5.5 has full Claude Code low→max ladder. No new ladder points vs morning plot.",
@@ -1895,7 +1921,8 @@
       "UPDATED 2026-10-02 ~8:00am ET: Sonnet 5.5 → AA Intelligence ladder (low 35.868 @ $0.417; medium 40.839 @ $0.589; high 46.753 @ $1.122; xhigh 51.896 @ $2.746; max 56.000 @ $7.667).",
       "ADDED 2026-10-02 ~5:00pm ET: Grok 4.7 Low (grok-4-7-low) on AA Intelligence (42.217 @ $1.248), Terminal-Bench 4.0 (16.162% @ $6.331), SciCode (54.861% @ $0.027). Medium still 404. Coding Agent still Grok Build xhigh only.",
       "ADDED 2026-10-07 ~3:30pm ET: Haiku 5.5 (claude-haiku-5-5*). AA Intelligence / TB4 / SciCode: only xhigh and max are costed (low/medium/high scored, uncosted, AA labels all variants \"Default Fallback\"). CursorBench 4.0: full low→max ladder. Coding Agent: not listed.",
-      "UPDATED 2026-10-08 ~8:00am ET: Sonnet 5.5 $/task cut on AA Intelligence / TB4 and CursorBench (scores unchanged). Haiku 5.5 low / medium / high now costed on AA Intelligence / TB4 / SciCode, and Haiku 5.5 has a full Claude Code ladder on Coding Agent."
+      "UPDATED 2026-10-08 ~8:00am ET: Sonnet 5.5 $/task cut on AA Intelligence / TB4 and CursorBench (scores unchanged). Haiku 5.5 low / medium / high now costed on AA Intelligence / TB4 / SciCode, and Haiku 5.5 has a full Claude Code ladder on Coding Agent.",
+      "ADDED 2026-10-14 ~7:51am ET: Gemini 4 Argon on CursorBench 4.0 (Minimal/Low/Medium/High). AA Intelligence/TB4/SciCode/Coding Agent unchanged (noise-only Luna <0.25% $/task and Haiku 5.5 Low Intel +0.003)."
     ],
     "aa_intelligence_v4_3_2": {
       "argon_ladder": "Only gemini-4-argon page published (display name High); effort slug variants 404.",

@@ -23,6 +23,7 @@
     coding_agent_index: "Coding Agent Index",
   };
   const EFFORT_LABELS = {
+    minimal: "Minimal",
     low: "Low",
     medium: "Medium",
     high: "High",
